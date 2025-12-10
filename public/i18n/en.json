@@ -1,0 +1,29 @@
+{
+  "overlay": {
+    "slide1": {
+      "title": "Future technologies at your fingertips",
+      "description": "Our system helps early pest detection using AI and reduces pesticide usage by up to 40%."
+    },
+    "slide2": {
+      "title": "AI for more efficient farms",
+      "description": "Smart solutions to monitor crops and make fast data-driven decisions with computer vision."
+    },
+    "slide3": {
+      "title": "Sustainability and resource saving",
+      "description": "Precise tools to minimize waste and boost productivity while protecting environment and budget."
+    }
+  },
+  "login": {
+    "title": "Welcome back!",
+    "subtitle": "Sign in to follow your crops and manage the control system.",
+    "email": { "label": "Email" },
+    "password": { "label": "Password" },
+    "remember": { "label": "Remember me" },
+    "forgot": "Forgot password?",
+    "submit": "Sign In",
+    "or": "Or sign in with",
+    "google": "Google",
+    "noaccount": "Don't have an account?",
+    "signup": "Create a free account"
+  }
+}

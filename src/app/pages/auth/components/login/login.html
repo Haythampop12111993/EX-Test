@@ -1,0 +1,82 @@
+<app-auth-layout>
+  <div class="flex flex-col items-center lg:items-start">
+    <div class="h-12 w-12 bg-agri-100 text-agri-700 rounded-xl flex items-center justify-center mb-4">
+      <i class="pi pi-shield text-2xl" aria-hidden="true"></i>
+    </div>
+    <h2 class="mt-2 text-3xl font-bold text-gray-900 tracking-tight">{{ 'login.title' | translate }}</h2>
+    <p class="mt-2 text-sm text-gray-600">
+      {{ 'login.subtitle' | translate }}
+    </p>
+  </div>
+
+  <div class="mt-8">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">{{ 'login.email.label' | translate }}</label>
+        <div class="mt-1">
+          <input id="email" formControlName="email" type="email" autocomplete="email" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-agri-500 focus:border-agri-500 sm:text-sm transition duration-200"
+                 placeholder="example@agri-tech.com">
+        </div>
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">{{ 'login.password.label' | translate }}</label>
+        <div class="mt-1">
+          <input id="password" formControlName="password" type="password" autocomplete="current-password" required
+                 class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-agri-500 focus:border-agri-500 sm:text-sm transition duration-200"
+                 placeholder="••••••••">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input id="remember-me" type="checkbox" formControlName="rememberMe"
+                 class="h-4 w-4 text-agri-600 focus:ring-agri-500 border-gray-300 rounded cursor-pointer">
+          <label for="remember-me" class="mr-2 block text-sm text-gray-900 cursor-pointer">{{ 'login.remember.label' | translate }}</label>
+        </div>
+
+        <div class="text-sm">
+          <a class="font-medium text-agri-700 hover:text-agri-600 hover:underline cursor-pointer">{{ 'login.forgot' | translate }}</a>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" pRipple
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-agri-600 hover:bg-agri-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-agri-500 transition duration-300 transform hover:-translate-y-0.5"
+                [disabled]="form.invalid || submitting">
+          {{ 'login.submit' | translate }}
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-6">
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white text-gray-500">{{ 'login.or' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 gap-3">
+        <div>
+          <a class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition cursor-pointer">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+            </svg>
+            <span class="mr-2">{{ 'login.google' | translate }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-gray-600">
+      {{ 'login.noaccount' | translate }}
+      <a class="font-medium text-agri-700 hover:text-agri-600 hover:underline cursor-pointer">
+        {{ 'login.signup' | translate }}
+      </a>
+    </p>
+  </div>
+</app-auth-layout>

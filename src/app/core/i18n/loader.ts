@@ -1,0 +1,12 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { TranslateLoader, TranslationObject } from '@ngx-translate/core';
+
+@Injectable()
+export class HttpJsonLoader implements TranslateLoader {
+  private readonly http = inject(HttpClient);
+  getTranslation(lang: string): Observable<TranslationObject> {
+    return this.http.get<TranslationObject>(`/i18n/${lang}.json`);
+  }
+}

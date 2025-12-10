@@ -1,0 +1,60 @@
+<div class="bg-gray-50">
+  <div [attr.dir]="locale.dir()" class="min-h-screen flex">
+    <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white w-full lg:w-1/2">
+      <div class="mx-auto w-full max-w-sm lg:w-96">
+        <ng-content></ng-content>
+      </div>
+    </div>
+    <div class="hidden lg:block relative w-0 flex-1">
+      <img class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out pointer-events-none"
+           [src]="slides[previousIndex].src"
+           [ngClass]="previousIndex === activeIndex ? 'opacity-100' : 'opacity-0'"
+           alt="Smart Agriculture background">
+      <img class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out opacity-100 pointer-events-none"
+           [src]="slides[activeIndex].src"
+           alt="Smart Agriculture background">
+      <div class="absolute inset-0 bg-agri-900 bg-opacity-40 mix-blend-multiply"></div>
+      <div class="absolute inset-0 p-12 text-white w-full">
+        <div class="absolute top-6 left-6 hidden lg:flex gap-2">
+          <button type="button"
+                  class="px-3 py-1 rounded-full text-white transition"
+                  [ngClass]="locale.lang() === 'ar' ? 'bg-white/40 ring-2 ring-white/60 font-semibold' : 'bg-white/20 hover:bg-white/30'"
+                  [attr.aria-current]="locale.lang() === 'ar' ? 'true' : null"
+                  (click)="setLang('ar')">AR</button>
+          <button type="button"
+                  class="px-3 py-1 rounded-full text-white transition"
+                  [ngClass]="locale.lang() === 'en' ? 'bg-white/40 ring-2 ring-white/60 font-semibold' : 'bg-white/20 hover:bg-white/30'"
+                  [attr.aria-current]="locale.lang() === 'en' ? 'true' : null"
+                  (click)="setLang('en')">EN</button>
+        </div>
+        <div class="relative h-full w-full">
+          <!-- <div class="absolute inset-0 flex items-center justify-center text-center transition-opacity duration-700 ease-out pointer-events-none"
+               [ngClass]="previousIndex === activeIndex ? 'opacity-100' : 'opacity-0'"
+               [attr.aria-hidden]="previousIndex === activeIndex ? 'false' : 'true'">
+            <h3 class="text-4xl font-bold mb-4">{{ slides[activeIndex].titleKey | translate }}</h3>
+            <p class="text-lg text-gray-100 max-w-md leading-relaxed mx-auto">
+              {{ slides[activeIndex].descriptionKey | translate }}
+            </p>
+          </div> -->
+          <div class="absolute inset-0 flex flex-col gap-4 items-center justify-center text-center transition-opacity duration-700 ease-out opacity-100"
+               [attr.aria-hidden]="previousIndex === activeIndex ? 'true' : 'false'">
+            <h3 class="text-4xl font-bold mb-4">{{ slides[activeIndex].titleKey | translate }}</h3>
+            <p class="text-lg text-gray-100 max-w-md leading-relaxed mx-auto">
+              {{ slides[activeIndex].descriptionKey | translate }}
+            </p>
+          </div>
+          <div class="absolute bottom-6 left-0 right-0 flex gap-2 justify-center" role="tablist" aria-label="اختيار الخلفية">
+            @for (slide of slides; track $index) {
+              <button type="button"
+                      class="rounded-full transition-all cursor-pointer"
+                      [ngClass]="$index === activeIndex ? 'w-8 h-2 bg-white' : 'w-2 h-2 bg-white/50'"
+                      (click)="select($index)"
+                      [attr.aria-selected]="$index === activeIndex"
+                      [attr.aria-label]="'خلفية ' + ($index + 1)"></button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
