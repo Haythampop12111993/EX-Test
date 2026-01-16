@@ -2,16 +2,25 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PasswordModule } from 'primeng/password';
 import { TranslateModule } from '@ngx-translate/core';
-import { AuthLayout } from '../../../../layouts/auth-layout/auth-layout';
+import { AuthLayoutComponent } from '../../../../layouts/auth-layout/auth-layout';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     RippleModule,
+    ButtonModule,
+    InputTextModule,
+    CheckboxModule,
+    PasswordModule,
     TranslateModule,
-    AuthLayout,
+    AuthLayoutComponent,
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -36,7 +45,7 @@ export class Login {
     setTimeout(() => {
       localStorage.setItem('ACCESS_TOKEN', 'dummy');
       this.submitting = false;
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/dashboard');
     }, 600);
   }
 }

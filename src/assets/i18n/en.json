@@ -1,0 +1,119 @@
+{
+    "common": {
+        "home": "Home",
+        "search": "Search..."
+    },
+    "login": {
+        "logout": "Log Out",
+        "title": "Welcome Back",
+        "subtitle": "Facility Pest Control Management System",
+        "welcome_message": "Please sign in to continue",
+        "email": {
+            "label": "Email Address",
+            "placeholder": "Enter your email"
+        },
+        "password": {
+            "label": "Password",
+            "placeholder": "Enter your password"
+        },
+        "remember": {
+            "label": "Remember me"
+        },
+        "forgot": "Forgot password?",
+        "submit": "Sign In",
+        "noaccount": "Don't have an account?",
+        "signup": "Sign up",
+        "quote": "System design is not just about how it looks, but how it works and scales for the future.",
+        "trusted_by": "Trusted by 100+ Companies",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "copyright": "© 2024 AdminPro System"
+    },
+    "dashboard": {
+        "title": "Exploration & Control System",
+        "subtitle": "Facility Pest Control Management",
+        "stats": {
+            "total_ops": "Total Operations",
+            "active_sites": "Active Sites",
+            "alerts": "Active Alerts",
+            "efficiency": "System Efficiency",
+            "active_users": "Active Users",
+            "server_status": "Server Status",
+            "response_time": "Response Time",
+            "vs_last_month": "vs last month"
+        },
+        "weekly_traffic": "Weekly Traffic",
+        "recent_activity": "Recent Activity",
+        "controlPanel": {
+            "title": "Control Panel",
+            "desc": "System Analytics & Management",
+            "dashboard": {
+                "title": "Dashboard Overview"
+            },
+            "scoutingOps": {
+                "title": "Scouting Operations"
+            },
+            "controlOps": {
+                "title": "Control Operations"
+            },
+            "scoutingEval": {
+                "title": "Scouting Evaluation",
+                "placeholder": "Evaluation metrics and forms will appear here soon."
+            },
+            "controlEval": {
+                "title": "Control Evaluation",
+                "placeholder": "Evaluation metrics and forms will appear here soon."
+            },
+            "operations": "Operations",
+            "evaluation": "Evaluation",
+            "menu": "Main Menu",
+            "viewProfile": "View Profile"
+        },
+        "charts": {
+            "pestDistribution": "Pest Distribution",
+            "pestDistributionDesc": "Distribution across all active sites",
+            "efficiencyTrends": "Efficiency Trends",
+            "efficiencyTrendsDesc": "Performance metrics over time",
+            "total": "Total",
+            "loading": "Loading Analytics..."
+        },
+        "table": {
+            "headers": {
+                "id": "ID",
+                "site": "Site",
+                "date": "Date",
+                "technician": "Technician",
+                "status": "Status"
+            },
+            "status": {
+                "completed": "Completed",
+                "pending": "Pending",
+                "inProgress": "In Progress"
+            }
+        },
+        "addScouting": {
+            "title": "Add Scouting",
+            "desc": "Record exploration data for sites and facilities"
+        },
+        "addControl": {
+            "title": "Add Control Operation",
+            "desc": "Register new pest control operations"
+        },
+        "addMonitoring": {
+            "title": "Add Monitoring",
+            "desc": "Follow up on scouting and control operations"
+        }
+    },
+    "monitoring": {
+        "title": "Monitoring Operations",
+        "subtitle": "Choose the type of operation to monitor",
+        "scouting": {
+            "title": "Monitor Scouting",
+            "desc": "Add observations to existing scouting operations"
+        },
+        "control": {
+            "title": "Monitor Control",
+            "desc": "Add observations and results to control operations"
+        }
+    }
+}

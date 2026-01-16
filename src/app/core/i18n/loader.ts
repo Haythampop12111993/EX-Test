@@ -7,6 +7,6 @@ import { TranslateLoader, TranslationObject } from '@ngx-translate/core';
 export class HttpJsonLoader implements TranslateLoader {
   private readonly http = inject(HttpClient);
   getTranslation(lang: string): Observable<TranslationObject> {
-    return this.http.get<TranslationObject>(`/i18n/${lang}.json`);
+    return this.http.get<TranslationObject>(`/assets/i18n/${lang}.json`);
   }
 }

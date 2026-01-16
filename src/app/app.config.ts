@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
       TranslateModule.forRoot({
-        defaultLanguage: 'ar',
+        fallbackLang: 'ar',
         loader: {
           provide: TranslateLoader,
           useClass: HttpJsonLoader

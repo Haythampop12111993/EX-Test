@@ -1,0 +1,83 @@
+<div class="flex flex-col gap-8">
+    
+    <!-- KPI Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (stat of stats; track stat.label) {
+            <div class="card-glass p-6 relative group overflow-hidden transition-all duration-300 hover:-translate-y-1">
+                <!-- Background decoration -->
+                <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 transition-transform group-hover:scale-110"
+                     [ngClass]="stat.bgClass"></div>
+                
+                <div class="flex justify-between items-start z-10 relative">
+                    <div>
+                        <span class="text-slate-500 text-sm font-medium">{{ stat.label | translate }}</span>
+                        <h4 class="text-2xl font-bold text-slate-800 mt-2 tracking-tight">{{ stat.value }}</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full" 
+                                  [ngClass]="stat.trendUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'">
+                                <i class="pi" [ngClass]="stat.trendUp ? 'pi-arrow-up' : 'pi-arrow-down'" style="font-size: 0.6rem"></i>
+                                {{ stat.trend }}
+                            </span>
+                            <span class="text-xs text-slate-400">{{ 'dashboard.stats.vs_last_month' | translate }}</span>
+                        </div>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm" [ngClass]="stat.iconBgClass">
+                        <i [class]="'pi ' + stat.icon + ' text-xl'" [ngClass]="stat.iconColorClass"></i>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+
+        @if (chartsData(); as data) {
+
+        <!-- Pest Distribution (Doughnut) -->
+        <div class="card-glass p-8 flex flex-col items-center">
+            <div class="w-full flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">{{ 'dashboard.charts.pestDistribution' | translate }}</h3>
+                    <p class="text-xs text-slate-500 mt-1">{{ 'dashboard.charts.pestDistributionDesc' | translate }}</p>
+                </div>
+                <button pButton icon="pi pi-ellipsis-h" class="p-button-text p-button-rounded text-slate-400 hover:text-brand-600"></button>
+            </div>
+            <div class="w-full flex justify-center">
+                <div class="relative w-full max-w-xs md:max-w-sm h-72">
+                    <p-chart type="doughnut" [data]="data.pestDist" [options]="doughnutOptions" class="w-full h-full"></p-chart>
+                <!-- Center Text Overlay -->
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div class="text-center pt-8">
+                            <span class="block text-3xl font-bold text-slate-700">100%</span>
+                            <span class="text-xs text-slate-400 font-medium">{{ 'dashboard.charts.total' | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Efficiency Trends (Line) -->
+        <div class="card-glass p-8 flex flex-col items-center">
+            <div class="w-full flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">{{ 'dashboard.charts.efficiencyTrends' | translate }}</h3>
+                    <p class="text-xs text-slate-500 mt-1">{{ 'dashboard.charts.efficiencyTrendsDesc' | translate }}</p>
+                </div>
+                <button pButton icon="pi pi-ellipsis-h" class="p-button-text p-button-rounded text-slate-400 hover:text-brand-600"></button>
+            </div>
+            <div class="w-full h-72">
+                <p-chart type="line" [data]="data.efficiency" [options]="lineOptions" class="w-full h-full"></p-chart>
+            </div>
+        </div>
+
+        } @else {
+        <div class="col-span-2 flex items-center justify-center h-96">
+            <div class="flex flex-col items-center gap-4">
+                <i class="pi pi-spin pi-spinner text-4xl text-brand-500/50"></i>
+                <span class="text-slate-400 font-medium">{{ 'dashboard.charts.loading' | translate }}</span>
+            </div>
+        </div>
+        }
+    </div>
+</div>

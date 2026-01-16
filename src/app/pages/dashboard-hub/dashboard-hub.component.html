@@ -1,0 +1,121 @@
+<div class="min-h-screen bg-slate-50 flex flex-col items-center py-12 px-4 relative overflow-hidden font-sans">
+
+  <!-- Subtle Background -->
+  <div class="absolute inset-0 z-0">
+    <div
+      class="absolute -top-40 -right-40 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob">
+    </div>
+    <div
+      class="absolute top-40 -left-40 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000">
+    </div>
+    <div
+      class="absolute -bottom-40 right-40 w-96 h-96 bg-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-4000">
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="relative z-10 text-center mb-12 animate-fade-in-down">
+    <div
+      class="inline-flex items-center justify-center p-3 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm mb-6 ring-1 ring-slate-100">
+      <i class="pi pi-th-large text-3xl text-indigo-600"></i>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight mb-4">
+      {{ 'dashboard.title' | translate }}
+    </h1>
+    <p class="text-slate-500 text-lg opacity-80">
+      {{ 'dashboard.subtitle' | translate }}
+    </p>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl w-full">
+
+    <!-- Card 1: Control Panel -->
+    <div
+      class="group relative bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover:-translate-y-2 cursor-pointer overflow-hidden"
+      [routerLink]="['/control-panel']" tabindex="0" role="button"
+      (keydown.enter)="router.navigate(['/control-panel'])">
+
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <div
+          class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+          <i class="pi pi-cog text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">{{ 'dashboard.controlPanel.title' | translate }}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">
+          {{ 'dashboard.controlPanel.desc' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 2: Add Scouting -->
+    <div
+      class="group relative bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 hover:-translate-y-2 cursor-pointer overflow-hidden"
+      [routerLink]="['/operations/scouting']" tabindex="0" role="button"
+      (keydown.enter)="router.navigate(['/operations/scouting'])">
+
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <div
+          class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+          <i class="pi pi-search text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">{{ 'dashboard.addScouting.title' | translate }}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">
+          {{ 'dashboard.addScouting.desc' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 3: Add Control -->
+    <div
+      class="group relative bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:shadow-rose-500/10 transition-all duration-500 hover:-translate-y-2 cursor-pointer overflow-hidden"
+      [routerLink]="['/operations/control']" tabindex="0" role="button"
+      (keydown.enter)="router.navigate(['/operations/control'])">
+
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-rose-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <div
+          class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+          <i class="pi pi-shield text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">{{ 'dashboard.addControl.title' | translate }}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">
+          {{ 'dashboard.addControl.desc' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 4: Add Monitoring -->
+    <div
+      class="group relative bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:shadow-violet-500/10 transition-all duration-500 hover:-translate-y-2 cursor-pointer overflow-hidden"
+      [routerLink]="['/monitoring']" tabindex="0" role="button" (keydown.enter)="router.navigate(['/monitoring'])">
+
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-violet-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      </div>
+
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <div
+          class="w-16 h-16 bg-violet-100 text-violet-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+          <i class="pi pi-chart-line text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">{{ 'dashboard.addMonitoring.title' | translate }}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed">
+          {{ 'dashboard.addMonitoring.desc' | translate }}
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

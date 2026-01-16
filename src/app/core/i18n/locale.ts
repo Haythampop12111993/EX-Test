@@ -9,11 +9,13 @@ export class Locale {
 
   constructor() {
     this.translate.addLangs(['ar', 'en']);
-    const saved = (localStorage.getItem('LANG') as 'ar' | 'en' | null) ?? null;
-    if (saved === 'ar' || saved === 'en') {
+    const saved = (localStorage.getItem('LANG') as 'ar' | 'en' | null);
+    if (saved) {
       this.lang.set(saved);
+    } else {
+      this.lang.set('ar');
     }
-    this.translate.setDefaultLang(this.lang());
+    this.translate.setDefaultLang('ar');
     this.translate.use(this.lang());
     document.documentElement.setAttribute('dir', this.dir());
   }
