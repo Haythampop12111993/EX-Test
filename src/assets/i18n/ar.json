@@ -1,8 +1,26 @@
 {
     "common": {
-        "home": "الرئيسية",
-        "search": "بحث..."
-    },
+            "home": "الرئيسية",
+            "search": "بحث...",
+            "export": "تصدير للإكسل",
+            "actions": "الإجراءات",
+            "records": "سجل",
+            "tryAdjustingSearch": "حاول تعديل معايير البحث",
+            "noData": "لا توجد بيانات",
+            "edit": "تعديل",
+            "delete": "حذف",
+            "save": "حفظ",
+            "cancel": "إلغاء",
+            "confirm": "تأكيد",
+            "yes": "نعم",
+            "no": "لا",
+            "success": "تم بنجاح",
+            "error": "خطأ",
+            "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا السجل؟",
+            "confirmDeleteTitle": "تأكيد الحذف",
+            "savedSuccessfully": "تم الحفظ بنجاح",
+            "deletedSuccessfully": "تم الحذف بنجاح"
+        },
     "login": {
         "logout": "تسجيل الخروج",
         "title": "مرحباً بعودتك",
@@ -64,6 +82,22 @@
                 "title": "تقييم المكافحة",
                 "placeholder": "سيتم عرض مؤشرات ونماذج التقييم هنا قريباً."
             },
+            "administration": "الإدارة",
+            "users": {
+                "title": "إدارة المستخدمين",
+                "placeholder": "إدارة مستخدمي النظام والصلاحيات."
+            },
+            "pesticides": {
+                "title": "إدارة المبيدات",
+                "placeholder": "إدارة مخزون وبيانات المبيدات."
+            },
+            "pests": {
+                "title": "إدارة الآفات",
+                "placeholder": "إدارة قاعدة بيانات ومعلومات الآفات.",
+                "name": "الاسم العلمي",
+                "type": "النوع",
+                "severity": "الخطورة"
+            },
             "operations": "العمليات",
             "evaluation": "التقييم",
             "menu": "القائمة الرئيسية",
@@ -78,6 +112,7 @@
             "loading": "جاري تحميل التحليلات..."
         },
         "table": {
+            "pageReport": "عرض {first} إلى {last} من أصل {totalRecords} سجل",
             "headers": {
                 "id": "الرقم",
                 "site": "الموقع",

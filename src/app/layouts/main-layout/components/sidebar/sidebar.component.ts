@@ -152,6 +152,28 @@ export class SidebarComponent implements OnInit {
                         routerLink: ['control-eval']
                     }
                 ]
+            },
+            {
+                label: cp.administration || 'Administration',
+                icon: 'pi pi-cog',
+                expanded: true,
+                items: [
+                    {
+                        label: cp.users?.title || 'Users',
+                        icon: 'pi pi-users',
+                        routerLink: ['users']
+                    },
+                    {
+                        label: cp.pesticides?.title || 'Pesticides',
+                        icon: 'pi pi-box',
+                        routerLink: ['pesticides']
+                    },
+                    {
+                        label: cp.pests?.title || 'Pests',
+                        icon: 'pi pi-exclamation-triangle',
+                        routerLink: ['pests']
+                    }
+                ]
             }
         ];
     });

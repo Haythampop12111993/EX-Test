@@ -24,7 +24,7 @@
   "private": true,
   "packageManager": "npm@11.6.2",
   "dependencies": {
-    "chart.js": "^4.4.1",
+    "@angular/animations": "^21.1.0",
     "@angular/cdk": "^21.0.2",
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
@@ -35,16 +35,20 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "@primeuix/themes": "^2.0.2",
+    "chart.js": "^4.4.1",
+    "file-saver": "^2.0.5",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^21.0.1",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.0",
+    "@types/file-saver": "^2.0.7",
     "angular-eslint": "21.1.0",
     "autoprefixer": "^10.4.22",
     "eslint": "^9.39.1",
