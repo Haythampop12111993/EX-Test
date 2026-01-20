@@ -26,6 +26,18 @@ export const CONTROL_PANEL_ROUTES: Routes = [
             {
                 path: 'control-eval',
                 loadComponent: () => import('./pages/control-eval/control-eval.component').then(m => m.ControlEvalComponent)
+            },
+            {
+                path: 'users',
+                loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)
+            },
+            {
+                path: 'pesticides',
+                loadComponent: () => import('./pages/pesticides/pesticides.component').then(m => m.PesticidesComponent)
+            },
+            {
+                path: 'pests',
+                loadComponent: () => import('./pages/pests/pests.component').then(m => m.PestsComponent)
             }
         ]
     }

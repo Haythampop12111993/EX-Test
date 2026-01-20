@@ -1,8 +1,26 @@
 {
     "common": {
-        "home": "Home",
-        "search": "Search..."
-    },
+            "home": "Home",
+            "search": "Search...",
+            "export": "Export to Excel",
+            "actions": "Actions",
+            "records": "Records",
+            "tryAdjustingSearch": "Try adjusting your search criteria",
+            "noData": "No data found",
+            "edit": "Edit",
+            "delete": "Delete",
+            "save": "Save",
+            "cancel": "Cancel",
+            "confirm": "Confirm",
+            "yes": "Yes",
+            "no": "No",
+            "success": "Success",
+            "error": "Error",
+            "confirmDelete": "Are you sure you want to delete this record?",
+            "confirmDeleteTitle": "Confirm Delete",
+            "savedSuccessfully": "Saved successfully",
+            "deletedSuccessfully": "Deleted successfully"
+        },
     "login": {
         "logout": "Log Out",
         "title": "Welcome Back",
@@ -64,6 +82,22 @@
                 "title": "Control Evaluation",
                 "placeholder": "Evaluation metrics and forms will appear here soon."
             },
+            "administration": "Administration",
+            "users": {
+                "title": "Users Management",
+                "placeholder": "Manage system users and permissions."
+            },
+            "pesticides": {
+                "title": "Pesticides Management",
+                "placeholder": "Manage pesticide inventory and details."
+            },
+            "pests": {
+                "title": "Pests Management",
+                "placeholder": "Manage pest database and information.",
+                "name": "Scientific Name",
+                "type": "Type",
+                "severity": "Severity"
+            },
             "operations": "Operations",
             "evaluation": "Evaluation",
             "menu": "Main Menu",
@@ -78,6 +112,7 @@
             "loading": "Loading Analytics..."
         },
         "table": {
+            "pageReport": "Showing {first} to {last} of {totalRecords} entries",
             "headers": {
                 "id": "ID",
                 "site": "Site",

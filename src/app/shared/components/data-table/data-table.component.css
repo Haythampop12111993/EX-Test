@@ -1,0 +1,153 @@
+:host ::ng-deep {
+    .p-datatable-modern {
+        .p-datatable-header {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        /* Paginator Styling */
+        .p-paginator {
+            background: transparent;
+            border-top: 1px solid #f1f5f9;
+            padding: 1rem;
+            justify-content: flex-end;
+            
+            .p-paginator-current {
+                margin-right: auto;
+                color: #64748b;
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+            
+            .p-paginator-pages .p-paginator-page {
+                border-radius: 0.75rem;
+                min-width: 2.25rem;
+                height: 2.25rem;
+                color: #64748b;
+                font-size: 0.875rem;
+                font-weight: 600;
+                margin: 0 0.125rem;
+                border: 1px solid transparent;
+                transition: all 0.2s;
+                
+                &.p-highlight {
+                    background: #eff6ff;
+                    color: #2563eb;
+                    border-color: #dbeafe;
+                    box-shadow: 0 1px 2px 0 rgba(37, 99, 235, 0.05);
+                }
+                
+                &:hover:not(.p-highlight) {
+                    background: #f8fafc;
+                    color: #1e293b;
+                }
+            }
+
+            .p-paginator-first, .p-paginator-prev, .p-paginator-next, .p-paginator-last {
+                border-radius: 0.75rem;
+                min-width: 2.25rem;
+                height: 2.25rem;
+                color: #64748b;
+                margin: 0 0.125rem;
+                border: 1px solid transparent;
+                transition: all 0.2s;
+                
+                &:hover {
+                    background: #f8fafc;
+                    color: #2563eb;
+                    border-color: #f1f5f9;
+                }
+                
+                &.p-disabled {
+                    opacity: 0.5;
+                }
+            }
+            
+            .p-dropdown {
+                height: 2.25rem;
+                align-items: center;
+                border-radius: 0.75rem;
+                border-color: #e2e8f0;
+                margin-left: 1rem;
+                
+                &:hover {
+                    border-color: #cbd5e1;
+                }
+                
+                .p-inputtext {
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: #475569;
+                }
+            }
+        }
+
+        /* Sort Icon Styling */
+        .p-sortable-column-icon {
+            width: 0.8rem;
+            height: 0.8rem;
+            margin-left: 0.5rem;
+        }
+    }
+}
+
+/* RTL Support Override */
+:host-context([dir="rtl"]) {
+    ::ng-deep {
+        .p-paginator {
+            .p-paginator-current {
+                margin-right: 0;
+                margin-left: auto;
+            }
+            
+            .p-dropdown {
+                margin-left: 0;
+                margin-right: 1rem;
+            }
+        }
+        
+        .p-input-icon-left > i {
+            right: 0.75rem;
+            left: auto;
+        }
+        
+        .p-input-icon-left > .p-inputtext {
+            padding-right: 2.5rem;
+            padding-left: 1rem;
+        }
+
+        /* Adjust search icon in the new design */
+        .group .pi-search {
+            right: 0.75rem;
+            left: auto;
+        }
+
+        .group input {
+            padding-right: 2.5rem !important; /* pl-10 equivalent */
+            padding-left: 1rem !important; /* pr-4 equivalent */
+        }
+        
+        /* Fix Table Header padding */
+        th.first\:pl-6 {
+            padding-right: 1.5rem !important;
+            padding-left: 1rem !important;
+        }
+        
+        th.last\:pr-6 {
+            padding-left: 1.5rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        /* Fix Table Body padding */
+        td.first\:pl-6 {
+            padding-right: 1.5rem !important;
+            padding-left: 1rem !important;
+        }
+        
+        td.last\:pr-6 {
+            padding-left: 1.5rem !important;
+            padding-right: 1rem !important;
+        }
+    }
+}
