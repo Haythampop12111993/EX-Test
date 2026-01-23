@@ -25,10 +25,15 @@ export class DataTableComponent {
     @Input() cols: Column[] = [];
     @Input() title: string = '';
     @Input() loading: boolean = false;
-    @Input() tableId: string = 'default-table';
+    @Input() tableId: string = 'default-table'; // Unique ID for session storage
+    @Input() showAddButton: boolean = false;
     
     @Output() edit = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
+    @Output() add = new EventEmitter<void>();
+
+    first: number = 0;
+    rows: number = 10;
 
     @ViewChild('dt') dt!: Table;
 

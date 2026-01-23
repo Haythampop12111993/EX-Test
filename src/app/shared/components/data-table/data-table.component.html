@@ -8,9 +8,11 @@
             </div>
             <div>
                 <h3 class="text-lg font-bold text-slate-800 tracking-tight">{{ title | translate }}</h3>
-                <p class="text-xs text-slate-500 font-medium" *ngIf="data">
-                    {{ data.length }} {{ 'common.records' | translate }}
-                </p>
+                @if (data) {
+                    <p class="text-xs text-slate-500 font-medium">
+                        {{ data.length }} {{ 'common.records' | translate }}
+                    </p>
+                }
             </div>
         </div>
         
@@ -24,6 +26,16 @@
                        [placeholder]="'common.search' | translate"
                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-slate-200 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all" />
             </div>
+
+            <!-- Add Button -->
+            @if (showAddButton) {
+                <button pButton pRipple 
+                        [label]="'common.add' | translate" 
+                        icon="pi pi-plus" 
+                        class="p-button-primary rounded-xl h-10 font-medium text-sm shadow-sm hover:shadow-md transition-all"
+                        (click)="add.emit()">
+                </button>
+            }
 
             <!-- Export Button -->
             <button pButton pRipple 
@@ -56,14 +68,15 @@
         <!-- Table Header -->
         <ng-template pTemplate="header">
             <tr>
-                <th *ngFor="let col of cols" 
-                    [pSortableColumn]="col.field" 
-                    class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 first:pl-6 last:pr-6 cursor-pointer hover:bg-slate-100/50 transition-colors group">
-                    <div class="flex items-center gap-2">
-                        {{ col.header | translate }}
-                        <p-sortIcon [field]="col.field" class="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"></p-sortIcon>
-                    </div>
-                </th>
+                @for (col of cols; track col.field) {
+                    <th [pSortableColumn]="col.field" 
+                        class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 first:pl-6 last:pr-6 cursor-pointer hover:bg-slate-100/50 transition-colors group">
+                        <div class="flex items-center gap-2">
+                            {{ col.header | translate }}
+                            <p-sortIcon [field]="col.field" class="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"></p-sortIcon>
+                        </div>
+                    </th>
+                }
                 <th class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 w-24 text-center">
                     {{ 'common.actions' | translate }}
                 </th>
@@ -73,13 +86,15 @@
         <!-- Table Body -->
         <ng-template pTemplate="body" let-rowData>
             <tr class="group border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all duration-200">
-                <td *ngFor="let col of cols" class="p-4 text-sm text-slate-600 font-medium first:pl-6 last:pr-6">
-                    <!-- Custom rendering for specific fields could go here via templates, but for now generic -->
-                    <span [ngClass]="{'px-2.5 py-1 rounded-lg text-xs font-bold': col.field === 'status' || col.field === 'severity'}"
-                          [class]="getStatusClass(rowData[col.field], col.field)">
-                        {{ rowData[col.field] }}
-                    </span>
-                </td>
+                @for (col of cols; track col.field) {
+                    <td class="p-4 text-sm text-slate-600 font-medium first:pl-6 last:pr-6">
+                        <!-- Custom rendering for specific fields could go here via templates, but for now generic -->
+                        <span [ngClass]="{'px-2.5 py-1 rounded-lg text-xs font-bold': col.field === 'status' || col.field === 'severity'}"
+                              [class]="getStatusClass(rowData[col.field], col.field)">
+                            {{ rowData[col.field] }}
+                        </span>
+                    </td>
+                }
                 <td class="p-4 text-center">
                     <div class="flex items-center justify-center gap-2">
                         <button pButton icon="pi pi-pencil" 
@@ -94,33 +109,17 @@
                 </td>
             </tr>
         </ng-template>
-
+        
         <!-- Empty State -->
         <ng-template pTemplate="emptymessage">
             <tr>
-                <td [attr.colspan]="cols.length + 1" class="text-center p-12">
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                            <i class="pi pi-search text-2xl text-slate-300"></i>
-                        </div>
-                        <h4 class="text-slate-800 font-bold mb-1">{{ 'common.noData' | translate }}</h4>
-                        <p class="text-slate-400 text-sm">{{ 'common.tryAdjustingSearch' | translate }}</p>
+                <td [attr.colspan]="cols.length + 1" class="text-center p-8">
+                    <div class="flex flex-col items-center justify-center text-slate-400">
+                        <i class="pi pi-inbox text-4xl mb-3"></i>
+                        <p class="text-sm font-medium">{{ 'common.noData' | translate }}</p>
                     </div>
                 </td>
             </tr>
         </ng-template>
-
-        <!-- Loading State -->
-        <ng-template pTemplate="loadingbody" let-columns="columns">
-            <tr *ngFor="let i of [1,2,3,4,5]">
-                <td *ngFor="let col of columns" class="p-4">
-                    <div class="h-4 bg-slate-100 rounded animate-pulse"></div>
-                </td>
-                <td class="p-4">
-                    <div class="h-8 w-8 rounded-full bg-slate-100 animate-pulse mx-auto"></div>
-                </td>
-            </tr>
-        </ng-template>
-
     </p-table>
 </div>

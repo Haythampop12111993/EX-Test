@@ -1,16 +1,15 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { DataTableComponent, Column } from '../../../../shared/components/data-table/data-table.component';
+import { DynamicFormComponent } from '../../../../shared/components/dynamic-form/dynamic-form.component';
+import { FieldConfig } from '../../../../shared/models/field-config.interface';
 
 // PrimeNG Imports
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
@@ -19,14 +18,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   imports: [
     CommonModule, 
     TranslateModule, 
-    ReactiveFormsModule,
     DataTableComponent,
+    DynamicFormComponent,
     DialogModule,
     ConfirmDialogModule,
-    ToastModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule
+    ToastModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './pests.component.html',
@@ -34,28 +30,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PestsComponent {
-    private fb = inject(FormBuilder);
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
 
     loading = false;
     displayDialog = false;
-    pestForm!: FormGroup;
-    
-    // Dropdown Options
-    severityOptions = [
-        { label: 'High', value: 'High' },
-        { label: 'Medium', value: 'Medium' },
-        { label: 'Low', value: 'Low' },
-        { label: 'Critical', value: 'Critical' }
-    ];
-
-    statusOptions = [
-        { label: 'Active', value: 'Active' },
-        { label: 'Controlled', value: 'Controlled' },
-        { label: 'Monitored', value: 'Monitored' }
-    ];
+    selectedPest: any = {};
     
     cols: Column[] = [
         { field: 'id', header: 'dashboard.table.headers.id' },
@@ -80,22 +61,74 @@ export class PestsComponent {
         { id: 'P-012', name: 'Moth', type: 'Insect', severity: 'Low', status: 'Monitored' }
     ];
 
-    constructor() {
-        this.initForm();
-    }
+    formConfig: FieldConfig[] = [
+        {
+            type: 'text',
+            name: 'name',
+            label: 'dashboard.controlPanel.pests.name',
+            required: true,
+            validations: [
+                { name: 'required', validator: Validators.required, message: 'common.required' }
+            ],
+            gridClass: 'col-span-12'
+        },
+        {
+            type: 'text',
+            name: 'type',
+            label: 'dashboard.controlPanel.pests.type',
+            required: true,
+            validations: [
+                { name: 'required', validator: Validators.required, message: 'common.required' }
+            ],
+            gridClass: 'col-span-12'
+        },
+        {
+            type: 'select',
+            name: 'severity',
+            label: 'dashboard.controlPanel.pests.severity',
+            required: true,
+            options: [
+                { label: 'High', value: 'High' },
+                { label: 'Medium', value: 'Medium' },
+                { label: 'Low', value: 'Low' },
+                { label: 'Critical', value: 'Critical' }
+            ],
+            validations: [
+                { name: 'required', validator: Validators.required, message: 'common.required' }
+            ],
+            gridClass: 'col-span-12'
+        },
+        {
+            type: 'select',
+            name: 'status',
+            label: 'dashboard.table.headers.status',
+            required: true,
+            options: [
+                { label: 'Active', value: 'Active' },
+                { label: 'Controlled', value: 'Controlled' },
+                { label: 'Monitored', value: 'Monitored' }
+            ],
+            validations: [
+                { name: 'required', validator: Validators.required, message: 'common.required' }
+            ],
+            gridClass: 'col-span-12'
+        },
+        {
+            type: 'file',
+            name: 'image',
+            label: 'dashboard.controlPanel.pests.image',
+            accept: 'image/*',
+            gridClass: 'col-span-12'
+        }
+    ];
 
-    private initForm() {
-        this.pestForm = this.fb.group({
-            id: [''],
-            name: ['', Validators.required],
-            type: ['', Validators.required],
-            severity: ['', Validators.required],
-            status: ['', Validators.required]
-        });
+    onAdd() {
+        this.selectedPest = {};
+        this.displayDialog = true;
     }
 
     onEdit(pest: any) {
-        this.pestForm.patchValue(pest);
+        this.selectedPest = { ...pest };
         this.displayDialog = true;
     }
 
@@ -119,23 +152,34 @@ export class PestsComponent {
         });
     }
 
-    savePest() {
-        if (this.pestForm.valid) {
-            const updatedPest = this.pestForm.value;
+    savePest(formData: any) {
+        console.log('Form Data Submitted:', formData);
+        if (this.selectedPest.id) {
+            // Edit existing
+            const updatedPest = { ...this.selectedPest, ...formData };
             const index = this.pests.findIndex(p => p.id === updatedPest.id);
             
             if (index !== -1) {
                 this.pests[index] = updatedPest;
                 this.pests = [...this.pests]; // Trigger change detection
             }
-            
-            this.displayDialog = false;
-            this.messageService.add({
-                severity: 'success', 
-                summary: this.translate.instant('common.success'), 
-                detail: this.translate.instant('common.savedSuccessfully')
-            });
+        } else {
+            // Add new
+            const newPest = {
+                id: 'P-' + String(this.pests.length + 1).padStart(3, '0'),
+                ...formData,
+                severity: formData.severity || 'Low', // Default values if not selected
+                status: formData.status || 'Active'
+            };
+            this.pests = [...this.pests, newPest];
         }
+        
+        this.displayDialog = false;
+        this.messageService.add({
+            severity: 'success', 
+            summary: this.translate.instant('common.success'), 
+            detail: this.translate.instant('common.savedSuccessfully')
+        });
     }
 
     hideDialog() {

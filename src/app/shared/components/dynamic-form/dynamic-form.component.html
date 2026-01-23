@@ -1,0 +1,145 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
+    @for (field of config; track field.name) {
+        <div [class]="field.gridClass || 'col-span-12'">
+            <label [for]="field.name" class="block text-sm font-medium text-slate-700 mb-1">
+                {{ field.label | translate }}
+                @if (field.required) {
+                    <span class="text-red-500">*</span>
+                }
+            </label>
+
+            @switch (field.type) {
+                @case ('text') {
+                    <input [id]="field.name" 
+                           type="text" 
+                           pInputText 
+                           [formControlName]="field.name" 
+                           [placeholder]="field.placeholder || ''"
+                           class="w-full"
+                           [ngClass]="{'ng-invalid ng-dirty': form.get(field.name)?.invalid && form.get(field.name)?.touched}">
+                }
+                @case ('number') {
+                    <p-inputNumber [id]="field.name"
+                                 [formControlName]="field.name"
+                                 [placeholder]="field.placeholder || ''"
+                                 styleClass="w-full"
+                                 class="w-full block">
+                    </p-inputNumber>
+                }
+                @case ('email') {
+                     <input [id]="field.name" 
+                           type="email" 
+                           pInputText 
+                           [formControlName]="field.name" 
+                           [placeholder]="field.placeholder || ''"
+                           class="w-full"
+                           [ngClass]="{'ng-invalid ng-dirty': form.get(field.name)?.invalid && form.get(field.name)?.touched}">
+                }
+                @case ('password') {
+                     <input [id]="field.name" 
+                           type="password" 
+                           pInputText 
+                           [formControlName]="field.name" 
+                           [placeholder]="field.placeholder || ''"
+                           class="w-full"
+                           [ngClass]="{'ng-invalid ng-dirty': form.get(field.name)?.invalid && form.get(field.name)?.touched}">
+                }
+                @case ('select') {
+                    <p-select [id]="field.name"
+                              [options]="field.options || []"
+                              [formControlName]="field.name"
+                              optionLabel="label"
+                              optionValue="value"
+                              [placeholder]="field.placeholder || ''"
+                              styleClass="w-full">
+                    </p-select>
+                }
+                @case ('textarea') {
+                    <textarea [id]="field.name"
+                              pInputTextarea
+                              [formControlName]="field.name"
+                              [placeholder]="field.placeholder || ''"
+                              rows="3"
+                              class="w-full"
+                              [ngClass]="{'ng-invalid ng-dirty': form.get(field.name)?.invalid && form.get(field.name)?.touched}">
+                    </textarea>
+                }
+                @case ('checkbox') {
+                    <div class="flex items-center mt-2">
+                        <p-checkbox [id]="field.name" 
+                                  [formControlName]="field.name" 
+                                  [binary]="true">
+                        </p-checkbox>
+                    </div>
+                }
+                @case ('date') {
+            <p-datepicker [id]="field.name"
+                          [formControlName]="field.name"
+                          styleClass="w-full">
+            </p-datepicker>
+        }
+                @case ('file') {
+                    <div class="w-full">
+                        <p-fileUpload 
+                            [mode]="field.fileMode || 'basic'" 
+                            [chooseLabel]="field.label | translate"
+                            [accept]="field.accept"
+                            [maxFileSize]="field.maxFileSize || 1000000"
+                            [auto]="true"
+                            chooseIcon="pi pi-upload"
+                            styleClass="w-full"
+                            [customUpload]="true" 
+                            (uploadHandler)="onFileSelect($event, field.name)">
+                        </p-fileUpload>
+                        
+                        @if (filePreviews[field.name]) {
+                            <div class="mt-2 border border-slate-200 rounded p-2 inline-block bg-slate-50">
+                                <p-image [src]="filePreviews[field.name]" alt="Preview" width="100" [preview]="true"></p-image>
+                            </div>
+                        }
+
+                        @if (!filePreviews[field.name] && isString(form.get(field.name)?.value) && form.get(field.name)?.value) {
+                             <div class="mt-2 border border-slate-200 rounded p-2 inline-block bg-slate-50">
+                                <p-image [src]="form.get(field.name)?.value" alt="Existing" width="100" [preview]="true"></p-image>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+
+            @if (form.get(field.name)?.invalid && (form.get(field.name)?.dirty || form.get(field.name)?.touched)) {
+                <div class="text-red-500 text-xs mt-1">
+                    @for (validation of field.validations; track validation.name) {
+                        @if (form.get(field.name)?.hasError(validation.name)) {
+                            <div>
+                                {{ validation.message | translate }}
+                            </div>
+                        }
+                    }
+                    @if (form.get(field.name)?.hasError('required') && !hasRequiredValidation(field)) {
+                         <div>
+                            {{ 'common.required' | translate }}
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Buttons -->
+    <div class="col-span-12 flex justify-end gap-2 mt-4">
+        <button pButton pRipple 
+                type="button" 
+                [label]="cancelLabel | translate" 
+                icon="pi pi-times" 
+                class="p-button-text" 
+                (click)="onCancel()">
+        </button>
+        <button pButton pRipple 
+                type="submit" 
+                [label]="submitLabel | translate" 
+                icon="pi pi-check" 
+                [loading]="loading">
+        </button>
+    </div>
+</form>
