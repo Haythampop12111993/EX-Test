@@ -10,6 +10,8 @@
             "edit": "Edit",
             "delete": "Delete",
             "save": "Save",
+            "add": "Add",
+            "required": "Required field",
             "cancel": "Cancel",
             "confirm": "Confirm",
             "yes": "Yes",
@@ -96,7 +98,8 @@
                 "placeholder": "Manage pest database and information.",
                 "name": "Scientific Name",
                 "type": "Type",
-                "severity": "Severity"
+                "severity": "Severity",
+                "image": "Image"
             },
             "operations": "Operations",
             "evaluation": "Evaluation",

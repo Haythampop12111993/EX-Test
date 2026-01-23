@@ -56,10 +56,12 @@ import { ButtonModule } from 'primeng/button';
     </aside>
 
     <!-- Mobile Overlay -->
-    <div *ngIf="layoutService.sidebarVisible() && isMobile" 
-         (click)="layoutService.toggleSidebar()"
-         class="fixed inset-0 bg-slate-900/50 z-40 backdrop-blur-sm lg:hidden animate-fade-in">
-    </div>
+    @if (layoutService.sidebarVisible() && isMobile) {
+        <div 
+             (click)="layoutService.toggleSidebar()"
+             class="fixed inset-0 bg-slate-900/50 z-40 backdrop-blur-sm lg:hidden animate-fade-in">
+        </div>
+    }
   `,
   styles: [`
     :host {
