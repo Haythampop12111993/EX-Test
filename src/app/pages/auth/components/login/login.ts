@@ -8,6 +8,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthLayoutComponent } from '../../../../layouts/auth-layout/auth-layout';
+import { Auth } from '../../../../core/auth/auth';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +31,7 @@ import { AuthLayoutComponent } from '../../../../layouts/auth-layout/auth-layout
 export class Login {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly auth = inject(Auth);
 
   readonly form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -40,12 +43,21 @@ export class Login {
 
   submit() {
     if (this.form.invalid) return;
+    
     this.submitting = true;
-    // Placeholder: simulate success and navigate; replace with AuthService
-    setTimeout(() => {
-      localStorage.setItem('ACCESS_TOKEN', 'dummy');
-      this.submitting = false;
-      this.router.navigateByUrl('/dashboard');
-    }, 600);
+    const { email, password } = this.form.getRawValue();
+
+    if (email && password) {
+        this.auth.login({ email, password })
+            .pipe(finalize(() => this.submitting = false))
+            .subscribe({
+                next: (success: boolean) => {
+                    if (success) {
+                        this.router.navigateByUrl('/dashboard');
+                    }
+                },
+                error: (err: any) => console.error('Login failed', err)
+            });
+    }
   }
 }

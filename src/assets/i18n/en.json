@@ -1,28 +1,28 @@
 {
     "common": {
-            "home": "Home",
-            "search": "Search...",
-            "export": "Export to Excel",
-            "actions": "Actions",
-            "records": "Records",
-            "tryAdjustingSearch": "Try adjusting your search criteria",
-            "noData": "No data found",
-            "edit": "Edit",
-            "delete": "Delete",
-            "save": "Save",
-            "add": "Add",
-            "required": "Required field",
-            "cancel": "Cancel",
-            "confirm": "Confirm",
-            "yes": "Yes",
-            "no": "No",
-            "success": "Success",
-            "error": "Error",
-            "confirmDelete": "Are you sure you want to delete this record?",
-            "confirmDeleteTitle": "Confirm Delete",
-            "savedSuccessfully": "Saved successfully",
-            "deletedSuccessfully": "Deleted successfully"
-        },
+        "home": "Home",
+        "search": "Search...",
+        "export": "Export to Excel",
+        "actions": "Actions",
+        "records": "Records",
+        "tryAdjustingSearch": "Try adjusting your search criteria",
+        "noData": "No data found",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "add": "Add",
+        "required": "Required field",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "yes": "Yes",
+        "no": "No",
+        "success": "Success",
+        "error": "Error",
+        "confirmDelete": "Are you sure you want to delete this record?",
+        "confirmDeleteTitle": "Confirm Delete",
+        "savedSuccessfully": "Saved successfully",
+        "deletedSuccessfully": "Deleted successfully"
+    },
     "login": {
         "logout": "Log Out",
         "title": "Welcome Back",
@@ -153,5 +153,16 @@
             "title": "Monitor Control",
             "desc": "Add observations and results to control operations"
         }
+    },
+    "errors": {
+        "unknown": "An unknown error occurred!",
+        "network": "Network Error: {{message}}",
+        "unauthorized": "Unauthorized access. Please login again.",
+        "forbidden": "You do not have permission to perform this action.",
+        "notFound": "The requested resource was not found.",
+        "server": "Server error. Please try again later.",
+        "code": "Error Code: {{status}} Message: {{message}}",
+        "title": "Error",
+        "default": "An unexpected error occurred. Please try again later."
     }
 }
