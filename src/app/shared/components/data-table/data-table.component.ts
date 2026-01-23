@@ -69,7 +69,7 @@ export class DataTableComponent {
         if (!this.data || this.data.length === 0) return;
 
         const exportData = this.data.map(item => {
-            const newItem: any = {};
+            const newItem: Record<string, any> = {};
             this.cols.forEach(col => {
                 const header = this.translate.instant(col.header);
                 newItem[header] = item[col.field];

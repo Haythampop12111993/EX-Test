@@ -5,6 +5,7 @@ import { Validators } from '@angular/forms';
 import { DataTableComponent, Column } from '../../../../shared/components/data-table/data-table.component';
 import { DynamicFormComponent } from '../../../../shared/components/dynamic-form/dynamic-form.component';
 import { FieldConfig } from '../../../../shared/models/field-config.interface';
+import { Pest } from '../../../../shared/models/pest.interface';
 
 // PrimeNG Imports
 import { DialogModule } from 'primeng/dialog';
@@ -36,7 +37,7 @@ export class PestsComponent {
 
     loading = false;
     displayDialog = false;
-    selectedPest: any = {};
+    selectedPest: Partial<Pest> = {};
     
     cols: Column[] = [
         { field: 'id', header: 'dashboard.table.headers.id' },
@@ -46,7 +47,7 @@ export class PestsComponent {
         { field: 'status', header: 'dashboard.table.headers.status' }
     ];
 
-    pests = [
+    pests: Pest[] = [
         { id: 'P-001', name: 'German Cockroach', type: 'Insect', severity: 'High', status: 'Active' },
         { id: 'P-002', name: 'Norway Rat', type: 'Rodent', severity: 'Critical', status: 'Active' },
         { id: 'P-003', name: 'Bed Bug', type: 'Insect', severity: 'Medium', status: 'Controlled' },
@@ -165,11 +166,13 @@ export class PestsComponent {
             }
         } else {
             // Add new
-            const newPest = {
+            const newPest: Pest = {
                 id: 'P-' + String(this.pests.length + 1).padStart(3, '0'),
-                ...formData,
-                severity: formData.severity || 'Low', // Default values if not selected
-                status: formData.status || 'Active'
+                name: formData.name!,
+                type: formData.type!,
+                severity: formData.severity || 'Low',
+                status: formData.status || 'Active',
+                image: formData.image
             };
             this.pests = [...this.pests, newPest];
         }

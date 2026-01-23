@@ -70,7 +70,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   }
 
   createForm() {
-    const group: any = {};
+    const group: Record<string, FormControl> = {};
     this.filePreviews = {}; // Reset previews
 
     this.config.forEach(field => {
