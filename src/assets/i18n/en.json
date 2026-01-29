@@ -238,6 +238,18 @@
         "server": "Server error. Please try again later.",
         "code": "Error Code: {{status}} Message: {{message}}",
         "title": "Error",
-        "default": "An unexpected error occurred. Please try again later."
+        "default": "An unexpected error occurred. Please try again later.",
+        "notFoundPage": {
+            "title": "Page Not Found",
+            "desc": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+            "backHome": "Back to Home",
+            "back": "Go Back"
+        },
+        "accessDenied": {
+            "title": "Access Denied",
+            "desc": "You do not have permission to access this page or perform this action. Please contact your administrator if you believe this is an error.",
+            "backHome": "Back to Home",
+            "back": "Go Back"
+        }
     }
 }
