@@ -40,5 +40,13 @@ export const routes: Routes = [
     path: 'control-panel',
     loadChildren: () => import('./pages/control-panel/control-panel.routes').then(m => m.CONTROL_PANEL_ROUTES),
   },
-  { path: '**', redirectTo: 'auth/login' },
+  {
+    path: 'not-found',
+    loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),
+  },
+  {
+    path: 'access-denied',
+    loadComponent: () => import('./pages/access-denied/access-denied.component').then(m => m.AccessDeniedComponent),
+  },
+  { path: '**', redirectTo: 'not-found' },
 ];

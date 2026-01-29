@@ -3,10 +3,12 @@ import { inject, Injector } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const messageService = inject(MessageService);
   const injector = inject(Injector);
+  const router = inject(Router);
 
   // Skip translation files to avoid circular dependency loops
   if (req.url.includes('/assets/i18n/')) {
@@ -30,8 +32,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = translate.instant('errors.unauthorized');
         } else if (error.status === 403) {
             errorMessage = translate.instant('errors.forbidden');
+            router.navigate(['/access-denied']);
         } else if (error.status === 404) {
-            errorMessage = translate.instant('errors.notFound');
+            errorMessage = translate.instant('errors.forbidden');
+            router.navigate(['/access-denied']);
         } else if (error.status >= 500) {
             errorMessage = translate.instant('errors.server');
         } else {
