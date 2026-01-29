@@ -30,7 +30,8 @@ export const CONTROL_PANEL_ROUTES: Routes = [
             {
                 path: 'users',
                 loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)
-            }
+            },
+            { path: '**', redirectTo: 'dashboard' }
         ]
     }
 ];
