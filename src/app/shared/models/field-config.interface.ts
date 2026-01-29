@@ -1,7 +1,7 @@
 import { ValidatorFn } from '@angular/forms';
 
 export interface FieldConfig {
-    type: 'text' | 'number' | 'email' | 'password' | 'select' | 'textarea' | 'date' | 'checkbox' | 'file';
+    type: 'text' | 'number' | 'email' | 'password' | 'select' | 'multiselect' | 'textarea' | 'date' | 'checkbox' | 'file';
     name: string;
     label: string;
     value?: any;

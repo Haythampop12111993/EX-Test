@@ -1,0 +1,106 @@
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+  <div class="flex flex-col sm:flex-row items-center justify-between mb-8 pb-6 border-b border-slate-100 gap-4">
+    <div class="flex items-center gap-3">
+        <div class="p-3 bg-emerald-50 rounded-lg text-emerald-600">
+            <i class="pi pi-shield text-2xl"></i>
+        </div>
+        <div>
+            <h2 class="text-xl font-bold text-slate-800">
+                {{ 'dashboard.controlPanel.roles.managePermissions' | translate }}
+            </h2>
+            <p class="text-slate-500 text-sm font-medium">{{ roleName() }}</p>
+        </div>
+    </div>
+    
+    <div class="flex gap-2 w-full sm:w-auto">
+        <button pButton 
+                [label]="'Permissions.selectAll' | translate" 
+                icon="pi pi-check-square"
+                class="p-button-outlined p-button-sm font-semibold flex-1 sm:flex-none"
+                (click)="toggleAll(true)">
+        </button>
+        <button pButton 
+                [label]="'Permissions.deselectAll' | translate" 
+                icon="pi pi-times"
+                class="p-button-outlined p-button-secondary p-button-sm font-semibold flex-1 sm:flex-none"
+                (click)="toggleAll(false)">
+        </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex flex-col items-center justify-center p-12 gap-4">
+        <i class="pi pi-spin pi-spinner text-4xl text-emerald-500"></i>
+        <p class="text-slate-500 font-medium">Loading permissions...</p>
+    </div>
+  } @else {
+    <div class="space-y-6 mb-8 overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar">
+        @for (group of groupedClaims(); track group.name) {
+            <div class="bg-slate-50/50 rounded-xl border border-slate-200 overflow-hidden hover:border-emerald-500 transition-colors">
+                <div class="px-6 py-4 bg-slate-100/50 border-b border-slate-200 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                        <i class="pi pi-folder text-emerald-500"></i>
+                        {{ 'Permissions.Groups.' + group.name | translate }}
+                        <span class="bg-slate-200 text-slate-600 text-xs px-2 py-1 rounded-full min-w-[24px] text-center">
+                            {{ group.claims.length }}
+                        </span>
+                    </h3>
+                    <div class="flex gap-2">
+                        <button pButton 
+                                icon="pi pi-check" 
+                                class="p-button-text p-button-rounded p-button-sm w-8 h-8 text-green-600 hover:bg-green-50" 
+                                pTooltip="Select Group"
+                                (click)="toggleGroup(group.name, true)">
+                        </button>
+                        <button pButton 
+                                icon="pi pi-times" 
+                                class="p-button-text p-button-rounded p-button-sm w-8 h-8 text-red-600 hover:bg-red-50" 
+                                pTooltip="Deselect Group"
+                                (click)="toggleGroup(group.name, false)">
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for (claim of group.claims; track claim.value) {
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-500 transition-all duration-200 flex items-center justify-between group cursor-pointer"
+                             (click)="claim.isSelected = !claim.isSelected; updateAllSelectedState()">
+                            <div class="flex flex-col">
+                                <span class="font-bold text-slate-700 group-hover:text-emerald-600 transition-colors">
+                                    {{ claim.value | translate }}
+                                </span>
+                                <span class="text-xs text-slate-400 mt-1">{{ claim.type }}</span>
+                            </div>
+                            <p-toggleSwitch [(ngModel)]="claim.isSelected" 
+                                       (onChange)="updateAllSelectedState()"
+                                       (click)="$event.stopPropagation()">
+                            </p-toggleSwitch>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        @empty {
+            <div class="text-center p-12 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                <i class="pi pi-inbox text-4xl text-slate-300 mb-4 block"></i>
+                <p class="text-slate-500 font-medium">{{ 'common.noData' | translate }}</p>
+            </div>
+        }
+    </div>
+  }
+
+  <div class="flex justify-end gap-3 pt-6 border-t border-slate-100">
+    <button pButton pRipple 
+            [label]="'common.cancel' | translate" 
+            class="p-button-text text-slate-500 hover:text-slate-700 font-bold px-6"
+            (click)="cancel.emit()">
+    </button>
+    <button pButton pRipple 
+            [label]="'common.save' | translate" 
+            icon="pi pi-save"
+            class="p-button-primary bg-emerald-600 border-emerald-600 hover:bg-emerald-700 font-bold px-8 shadow-lg shadow-emerald-200"
+            [loading]="saving()"
+            (click)="onSave()">
+    </button>
+  </div>
+</div>

@@ -139,36 +139,19 @@ export class SidebarComponent implements OnInit {
                 ]
             },
             {
-                label: cp.evaluation || 'Evaluation',
-                icon: 'pi pi-chart-bar',
-                expanded: true,
-                items: [
-                    {
-                        label: cp.scoutingEval?.title || 'Scouting Evaluation',
-                        icon: 'pi pi-check-circle',
-                        routerLink: ['scouting-eval']
-                    },
-                    {
-                        label: cp.controlEval?.title || 'Control Evaluation',
-                        icon: 'pi pi-file-edit',
-                        routerLink: ['control-eval']
-                    }
-                ]
-            },
-            {
                 label: cp.administration || 'Administration',
                 icon: 'pi pi-cog',
                 expanded: true,
                 items: [
                     {
+                        label: cp.roles?.title || 'Roles',
+                        icon: 'pi pi-lock',
+                        routerLink: ['roles']
+                    },
+                    {
                         label: cp.users?.title || 'Users',
                         icon: 'pi pi-users',
                         routerLink: ['users']
-                    },
-                    {
-                        label: cp.pesticides?.title || 'Pesticides',
-                        icon: 'pi pi-box',
-                        routerLink: ['pesticides']
                     },
                     {
                         label: cp.pests?.title || 'Pests',

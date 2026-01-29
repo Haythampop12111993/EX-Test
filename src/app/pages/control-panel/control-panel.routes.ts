@@ -20,24 +20,16 @@ export const CONTROL_PANEL_ROUTES: Routes = [
                 loadComponent: () => import('./pages/control-ops/control-ops.component').then(m => m.ControlOpsComponent)
             },
             {
-                path: 'scouting-eval',
-                loadComponent: () => import('./pages/scouting-eval/scouting-eval.component').then(m => m.ScoutingEvalComponent)
+                path: 'pests',
+                loadComponent: () => import('./pages/pests/pests.component').then(m => m.PestsComponent)
             },
             {
-                path: 'control-eval',
-                loadComponent: () => import('./pages/control-eval/control-eval.component').then(m => m.ControlEvalComponent)
+                path: 'roles',
+                loadComponent: () => import('./pages/roles/roles.component').then(m => m.RolesComponent)
             },
             {
                 path: 'users',
                 loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)
-            },
-            {
-                path: 'pesticides',
-                loadComponent: () => import('./pages/pesticides/pesticides.component').then(m => m.PesticidesComponent)
-            },
-            {
-                path: 'pests',
-                loadComponent: () => import('./pages/pests/pests.component').then(m => m.PestsComponent)
             }
         ]
     }

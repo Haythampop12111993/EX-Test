@@ -1,0 +1,71 @@
+:host ::ng-deep {
+    .p-toggleswitch {
+        width: 3rem;
+        height: 1.75rem;
+
+        .p-toggleswitch-slider {
+            background-color: #e2e8f0;
+            border: 2px solid transparent;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            border-radius: 9999px;
+
+            &:before {
+                width: 1.25rem;
+                height: 1.25rem;
+                margin-top: -0.625rem;
+                background: #ffffff;
+                box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+                border-radius: 50%;
+                transition: transform 0.2s;
+            }
+        }
+
+        &.p-toggleswitch-checked {
+            .p-toggleswitch-slider {
+                background: #059669 !important; /* emerald-600 */
+                border-color: #059669 !important;
+
+                &:before {
+                    transform: translateX(1.25rem);
+                }
+            }
+        }
+
+        &:not(.p-disabled):hover {
+            .p-toggleswitch-slider {
+                background-color: #cbd5e1;
+            }
+        }
+
+        &.p-toggleswitch-checked:not(.p-disabled):hover {
+            .p-toggleswitch-slider {
+                background: #047857 !important; /* emerald-700 */
+                border-color: #047857 !important;
+            }
+        }
+    }
+}
+
+.custom-scrollbar {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 20px;
+        
+        &:hover {
+            background-color: #94a3b8;
+        }
+    }
+}
+
+/* RTL Support for Toggle Switch */
+:host-context([dir="rtl"]) {
+    ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider:before {
+        transform: translateX(-1.25rem) !important;
+    }
+}

@@ -14,6 +14,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -25,6 +26,7 @@ import { ImageModule } from 'primeng/image';
     InputTextModule,
     ButtonModule,
     SelectModule,
+    MultiSelectModule,
     CheckboxModule,
     TextareaModule,
     DatePickerModule,

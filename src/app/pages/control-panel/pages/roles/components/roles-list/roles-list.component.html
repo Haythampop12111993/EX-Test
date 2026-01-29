@@ -1,0 +1,14 @@
+<app-data-table
+  [data]="roles"
+  [cols]="cols"
+  [title]="'dashboard.controlPanel.roles.title' | translate"
+ [loading]="loading"
+  [showAddButton]="true"
+  [showEditButton]="false"
+  [showDeleteButton]="true"
+  [showPermissionsButton]="true"
+  (add)="add.emit()"
+  (edit)="edit.emit($event)"
+  (delete)="delete.emit($event)"
+  (permissions)="managePermissions.emit($event)">
+</app-data-table>

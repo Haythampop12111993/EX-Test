@@ -1,4 +1,37 @@
 {
+    "names": {
+        "Admin": "مدير النظام",
+        "User": "مستخدم",
+        "Manager": "مدير",
+        "Technician": "فني",
+        "Supervisor": "مشرف",
+        "Scout": "مستكشف"
+    },
+    "Permissions": {
+        "Scouting": {
+            "Create": "إنشاء استكشاف",
+            "View": "عرض الاستكشاف",
+            "Edit": "تعديل الاستكشاف"
+        },
+        "Control": {
+            "Execute": "تنفيذ المكافحة",
+            "View": "عرض المكافحة"
+        },
+        "Evaluation": {
+            "Approve": "اعتماد التقييم",
+            "Reject": "رفض التقييم"
+        },
+        "Groups": {
+            "Scouting": "الاستكشاف",
+            "Control": "المكافحة",
+            "Evaluation": "التقييم"
+        },
+        "selectAll": "تحديد الكل",
+        "deselectAll": "إلغاء تحديد الكل",
+        "type": "النوع",
+        "permission": "الصلاحية",
+        "status": "الحالة"
+    },
     "common": {
         "home": "الرئيسية",
         "search": "بحث...",
@@ -7,6 +40,7 @@
         "records": "سجل",
         "tryAdjustingSearch": "حاول تعديل معايير البحث",
         "noData": "لا توجد بيانات",
+        "noValue": "لا توجد قيمة",
         "edit": "تعديل",
         "delete": "حذف",
         "save": "حفظ",
@@ -64,6 +98,31 @@
         },
         "weekly_traffic": "حركة المرور الأسبوعية",
         "recent_activity": "النشاط الأخير",
+        "users": {
+            "create": "إضافة مستخدم",
+            "edit": "تعديل مستخدم",
+            "table": {
+                "fullName": "الاسم الكامل",
+                "email": "البريد الإلكتروني",
+                "phoneNumber": "رقم الهاتف",
+                "roles": "الأدوار",
+                "area": "المنطقة"
+            },
+            "form": {
+                "fullName": "الاسم الكامل",
+                "email": "البريد الإلكتروني",
+                "phoneNumber": "رقم الهاتف",
+                "nationalId": "الرقم القومي",
+                "password": "كلمة المرور",
+                "assignedAreaId": "المنطقة التابعة",
+                "roles": "الأدوار",
+                "selectRoles": "اختر الأدوار"
+            },
+            "validation": {
+                "required": "حقل مطلوب",
+                "email": "صيغة البريد الإلكتروني غير صحيحة"
+            }
+        },
         "controlPanel": {
             "title": "لوحة التحكم",
             "desc": "إدارة النظام والتحليلات",
@@ -88,6 +147,14 @@
             "users": {
                 "title": "إدارة المستخدمين",
                 "placeholder": "إدارة مستخدمي النظام والصلاحيات."
+            },
+            "roles": {
+                "title": "إدارة الأدوار",
+                "add": "إضافة دور جديد",
+                "edit": "تعديل الدور",
+                "managePermissions": "إدارة الصلاحيات",
+                "save": "حفظ الدور",
+                "cancel": "إلغاء"
             },
             "pesticides": {
                 "title": "إدارة المبيدات",
@@ -121,7 +188,13 @@
                 "site": "الموقع",
                 "date": "التاريخ",
                 "technician": "الفني",
-                "status": "الحالة"
+                "status": "الحالة",
+                "name": "الاسم",
+                "email": "البريد الإلكتروني",
+                "role": "الدور",
+                "actions": "الإجراءات",
+                "roleName": "اسم الدور",
+                "description": "الوصف"
             },
             "status": {
                 "completed": "مكتمل",

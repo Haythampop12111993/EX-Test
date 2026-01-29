@@ -54,6 +54,17 @@
                               styleClass="w-full">
                     </p-select>
                 }
+                @case ('multiselect') {
+                    <p-multiselect [id]="field.name"
+                                 [options]="field.options || []"
+                                 [formControlName]="field.name"
+                                 optionLabel="label"
+                                 optionValue="value"
+                                 [placeholder]="field.placeholder || ''"
+                                 display="chip"
+                                 styleClass="w-full">
+                    </p-multiselect>
+                }
                 @case ('textarea') {
                     <textarea [id]="field.name"
                               pInputTextarea
