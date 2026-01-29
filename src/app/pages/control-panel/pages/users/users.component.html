@@ -1,9 +1,23 @@
 <div class="p-6">
-  <h2 class="text-2xl font-bold mb-6 text-slate-800">{{ 'dashboard.controlPanel.users.title' | translate }}</h2>
-  <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 flex items-center justify-center">
-    <div class="text-center">
-        <i class="pi pi-users text-4xl text-slate-300 mb-4"></i>
-        <p class="text-slate-500">{{ 'dashboard.controlPanel.users.placeholder' | translate }}</p>
-    </div>
-  </div>
+    <p-toast></p-toast>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+    @switch (viewState()) {
+        @case ('list') {
+            <app-users-list
+                [users]="users()"
+                [loading]="loading()"
+                (add)="showForm()"
+                (edit)="showForm($event)"
+                (delete)="onDelete($event)">
+            </app-users-list>
+        }
+        @case ('form') {
+            <app-users-form
+                [userId]="selectedUserId()"
+                (cancel)="showList()"
+                (save)="onFormSave()">
+            </app-users-form>
+        }
+    }
 </div>

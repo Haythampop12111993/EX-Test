@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 export interface Column {
     field: string;
@@ -15,7 +17,7 @@ export interface Column {
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, TranslateModule],
+  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, TooltipModule, TranslateModule, HasPermissionDirective],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,9 +29,19 @@ export class DataTableComponent {
     @Input() loading: boolean = false;
     @Input() tableId: string = 'default-table'; // Unique ID for session storage
     @Input() showAddButton: boolean = false;
+    @Input() showEditButton: boolean = true;
+    @Input() showDeleteButton: boolean = true;
+    @Input() showPermissionsButton: boolean = false;
+
+    // Permissions Inputs
+    @Input() addPermission?: string;
+    @Input() editPermission?: string;
+    @Input() deletePermission?: string;
+    @Input() permissionsPermission?: string;
     
     @Output() edit = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
+    @Output() permissions = new EventEmitter<any>();
     @Output() add = new EventEmitter<void>();
 
     first: number = 0;
@@ -43,10 +55,10 @@ export class DataTableComponent {
         return this.cols.map(col => col.field);
     }
 
-    getStatusClass(value: string, field: string): string {
-        if (!value) return '';
+    getStatusClass(value: any, field: string): string {
+        if (!value || (field !== 'status' && field !== 'severity')) return '';
         
-        const lowerValue = value.toLowerCase();
+        const lowerValue = String(value).toLowerCase();
         
         if (field === 'status') {
             if (lowerValue === 'active' || lowerValue === 'completed') return 'bg-emerald-50 text-emerald-600 border border-emerald-100';
@@ -63,6 +75,23 @@ export class DataTableComponent {
         }
 
         return '';
+    }
+
+    getDisplayValue(value: any): string {
+        if (value === null || value === undefined || value === '') {
+            return this.translate.instant('common.noValue');
+        }
+        
+        if (Array.isArray(value) && value.length === 0) {
+            return this.translate.instant('common.noValue');
+        }
+
+        const stringValue = String(value);
+        if (stringValue.trim().toLowerCase() === 'n/a') {
+            return this.translate.instant('common.noValue');
+        }
+
+        return stringValue;
     }
 
     exportExcel() {

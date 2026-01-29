@@ -1,0 +1,12 @@
+<app-data-table
+  [data]="users"
+  [cols]="cols"
+  [title]="'dashboard.controlPanel.users.title' | translate"
+  [loading]="loading"
+  [showAddButton]="true"
+  [showEditButton]="true"
+  [showDeleteButton]="true"
+  (add)="add.emit()"
+  (edit)="edit.emit($event)"
+  (delete)="delete.emit($event)">
+</app-data-table>

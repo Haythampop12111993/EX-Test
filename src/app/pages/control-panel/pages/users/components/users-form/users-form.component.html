@@ -1,0 +1,14 @@
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+  <h2 class="text-xl font-bold mb-4 text-slate-800">
+    {{ (userId ? 'dashboard.users.edit' : 'dashboard.users.create') | translate }}
+  </h2>
+  <app-dynamic-form
+    [config]="config"
+    [initialData]="initialData"
+    [loading]="loading()"
+    [submitLabel]="'common.save' | translate"
+    [cancelLabel]="'common.cancel' | translate"
+    (formSubmit)="onSubmit($event)"
+    (formCancel)="cancel.emit()">
+  </app-dynamic-form>
+</div>

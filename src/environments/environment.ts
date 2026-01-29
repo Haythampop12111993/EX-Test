@@ -1,4 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:3000/api'
+    domain: 'https://integratedpestmanagement.runasp.net',
+    apiUrl: 'https://integratedpestmanagement.runasp.net/api',
+    imageUrl: 'https://integratedpestmanagement.runasp.net/',
 };

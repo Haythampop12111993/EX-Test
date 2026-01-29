@@ -1,0 +1,26 @@
+<div class="p-6">
+  @if (viewState() === 'list') {
+    <app-roles-list
+      [roles]="roles() || []"
+      [loading]="loading()"
+      (add)="onAdd()"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+      (managePermissions)="onManagePermissions($event)">
+    </app-roles-list>
+  } @else if (viewState() === 'form') {
+    <app-roles-form
+      [role]="selectedRole()"
+      [loading]="saving()"
+      (save)="onSave($event)"
+      (cancel)="onCancel()">
+    </app-roles-form>
+  } @else if (viewState() === 'permissions') {
+    <app-manage-permissions
+      [roleId]="selectedRole()?.id || ''"
+      [roleNameLabel]="selectedRole()?.name || ''"
+      (save)="onPermissionsSave()"
+      (cancel)="onCancel()">
+    </app-manage-permissions>
+  }
+</div>

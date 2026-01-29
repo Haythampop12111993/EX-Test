@@ -1,4 +1,39 @@
 {
+    "roles": {
+        "names": {
+            "Admin": "Admin",
+            "User": "User",
+            "Manager": "Manager",
+            "Technician": "Technician",
+            "Supervisor": "Supervisor",
+            "Scout": "Scout"
+        }
+    },
+    "Permissions": {
+        "Scouting": {
+            "Create": "Create Scouting",
+            "View": "View Scouting",
+            "Edit": "Edit Scouting"
+        },
+        "Control": {
+            "Execute": "Execute Control",
+            "View": "View Control"
+        },
+        "Evaluation": {
+            "Approve": "Approve Evaluation",
+            "Reject": "Reject Evaluation"
+        },
+        "Groups": {
+            "Scouting": "Scouting",
+            "Control": "Control",
+            "Evaluation": "Evaluation"
+        },
+        "selectAll": "Select All",
+        "deselectAll": "Deselect All",
+        "type": "Type",
+        "permission": "Permission",
+        "status": "Status"
+    },
     "common": {
         "home": "Home",
         "search": "Search...",
@@ -7,6 +42,7 @@
         "records": "Records",
         "tryAdjustingSearch": "Try adjusting your search criteria",
         "noData": "No data found",
+        "noValue": "No Value",
         "edit": "Edit",
         "delete": "Delete",
         "save": "Save",
@@ -64,6 +100,31 @@
         },
         "weekly_traffic": "Weekly Traffic",
         "recent_activity": "Recent Activity",
+        "users": {
+            "create": "Create User",
+            "edit": "Edit User",
+            "table": {
+                "fullName": "Full Name",
+                "email": "Email",
+                "phoneNumber": "Phone Number",
+                "roles": "Roles",
+                "area": "Area"
+            },
+            "form": {
+                "fullName": "Full Name",
+                "email": "Email",
+                "phoneNumber": "Phone Number",
+                "nationalId": "National ID",
+                "password": "Password",
+                "assignedAreaId": "Assigned Area",
+                "roles": "Roles",
+                "selectRoles": "Select Roles"
+            },
+            "validation": {
+                "required": "Required field",
+                "email": "Invalid email format"
+            }
+        },
         "controlPanel": {
             "title": "Control Panel",
             "desc": "System Analytics & Management",
@@ -88,6 +149,14 @@
             "users": {
                 "title": "Users Management",
                 "placeholder": "Manage system users and permissions."
+            },
+            "roles": {
+                "title": "Roles Management",
+                "add": "Add New Role",
+                "edit": "Edit Role",
+                "managePermissions": "Manage Permissions",
+                "save": "Save Role",
+                "cancel": "Cancel"
             },
             "pesticides": {
                 "title": "Pesticides Management",
@@ -121,7 +190,13 @@
                 "site": "Site",
                 "date": "Date",
                 "technician": "Technician",
-                "status": "Status"
+                "status": "Status",
+                "name": "Name",
+                "email": "Email",
+                "role": "Role",
+                "actions": "Actions",
+                "roleName": "Role Name",
+                "description": "Description"
             },
             "status": {
                 "completed": "Completed",
