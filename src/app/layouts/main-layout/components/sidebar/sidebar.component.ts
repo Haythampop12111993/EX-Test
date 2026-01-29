@@ -118,7 +118,7 @@ export class SidebarComponent implements OnInit {
             {
                 label: cp.dashboard?.title || 'Dashboard',
                 icon: 'pi pi-home',
-                routerLink: ['dashboard'],
+                routerLink: ['/control-panel', 'dashboard'],
                 styleClass: 'mb-1'
             },
             {
@@ -129,12 +129,12 @@ export class SidebarComponent implements OnInit {
                     {
                         label: cp.scoutingOps?.title || 'Scouting Operations',
                         icon: 'pi pi-search',
-                        routerLink: ['scouting-ops']
+                        routerLink: ['/control-panel', 'scouting-ops']
                     },
                     {
                         label: cp.controlOps?.title || 'Control Operations',
                         icon: 'pi pi-shield',
-                        routerLink: ['control-ops']
+                        routerLink: ['/control-panel', 'control-ops']
                     }
                 ]
             },
@@ -146,17 +146,17 @@ export class SidebarComponent implements OnInit {
                     {
                         label: cp.roles?.title || 'Roles',
                         icon: 'pi pi-lock',
-                        routerLink: ['roles']
+                        routerLink: ['/control-panel', 'roles']
                     },
                     {
                         label: cp.users?.title || 'Users',
                         icon: 'pi pi-users',
-                        routerLink: ['users']
+                        routerLink: ['/control-panel', 'users']
                     },
                     {
                         label: cp.pests?.title || 'Pests',
                         icon: 'pi pi-exclamation-triangle',
-                        routerLink: ['pests']
+                        routerLink: ['/control-panel', 'pests']
                     }
                 ]
             }
