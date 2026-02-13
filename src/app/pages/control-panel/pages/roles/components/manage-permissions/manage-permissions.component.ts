@@ -25,19 +25,19 @@ interface PermissionGroup {
 })
 export class ManagePermissionsComponent implements OnInit {
   @Input() roleId!: string;
-  @Input() roleNameLabel: string = '';
-  @Output() save = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  @Input() roleNameLabel = '';
+  @Output() saved = new EventEmitter<void>();
+  @Output() cancelled = new EventEmitter<void>();
 
   private permissionsService = inject(PermissionsService);
   private messageService = inject(MessageService);
 
   claims = signal<RoleClaim[]>([]);
   roleName = signal<string>('');
-  loading = signal<boolean>(false);
-  saving = signal<boolean>(false);
+  loading = signal(false);
+  saving = signal(false);
   
-  allSelected = signal<boolean>(false);
+  allSelected = signal(false);
 
   // Group permissions by category (e.g., Permissions.Scouting.Create -> Scouting)
   groupedClaims = computed(() => {
@@ -89,18 +89,11 @@ export class ManagePermissionsComponent implements OnInit {
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (data) => {
-          if (data && Array.isArray((data as any).roleClaims)) {
-             this.claims.set((data as any).roleClaims);
-             this.roleName.set(data.roleName || '');
-          } else if (Array.isArray(data)) {
-             this.claims.set(data);
-          } else {
-             this.claims.set((data as any).permissions || (data as any).claims || []);
-             this.roleName.set(data.roleName || '');
-          }
+          this.claims.set(data.roleClaims || []);
+          this.roleName.set(data.roleName || '');
           this.updateAllSelectedState();
         },
-        error: (err) => {
+        error: (err: unknown) => {
           console.error('Failed to load permissions', err);
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load permissions' });
         }
@@ -141,9 +134,9 @@ export class ManagePermissionsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Permissions updated successfully' });
-          this.save.emit();
+          this.saved.emit();
         },
-        error: (err) => {
+        error: (err: unknown) => {
           console.error('Failed to update permissions', err);
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update permissions' });
         }

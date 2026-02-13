@@ -4,9 +4,9 @@ export interface FieldConfig {
     type: 'text' | 'number' | 'email' | 'password' | 'select' | 'multiselect' | 'textarea' | 'date' | 'checkbox' | 'file';
     name: string;
     label: string;
-    value?: any;
+    value?: unknown;
     placeholder?: string;
-    options?: { label: string, value: any }[];
+    options?: { label: string, value: unknown }[];
     validations?: {
         name: string;
         validator: ValidatorFn;

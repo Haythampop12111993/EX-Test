@@ -5,15 +5,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { Injector, NgZone } from '@angular/core';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
+type MessageAddFn = (value: unknown) => void;
+type TranslateInstantFn = (key: string, params?: Record<string, unknown>) => string;
+
 describe('GlobalErrorHandler', () => {
   let handler: GlobalErrorHandler;
-  let messageServiceSpy: { add: any };
-  let translateServiceSpy: { instant: any };
+  let messageServiceSpy: { add: ReturnType<typeof vi.fn<MessageAddFn>> };
+  let translateServiceSpy: { instant: ReturnType<typeof vi.fn<TranslateInstantFn>> };
   let ngZone: NgZone;
 
   beforeEach(() => {
-    messageServiceSpy = { add: vi.fn() };
-    translateServiceSpy = { instant: vi.fn() };
+    messageServiceSpy = { add: vi.fn<MessageAddFn>() };
+    translateServiceSpy = { instant: vi.fn<TranslateInstantFn>() };
 
     TestBed.configureTestingModule({
       providers: [
@@ -23,7 +26,7 @@ describe('GlobalErrorHandler', () => {
         {
             provide: Injector,
             useValue: {
-                get: (token: any) => {
+                get: (token: unknown) => {
                     if (token === MessageService) return messageServiceSpy;
                     if (token === TranslateService) return translateServiceSpy;
                     return null;
@@ -49,8 +52,8 @@ describe('GlobalErrorHandler', () => {
         return key;
     });
 
-    vi.spyOn(console, 'error').mockImplementation(() => {}); // Prevent console error output
-    vi.spyOn(ngZone, 'run').mockImplementation((fn: any) => fn());
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(ngZone, 'run').mockImplementation((fn: () => unknown) => fn());
 
     handler.handleError(error);
 

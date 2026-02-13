@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef, inject, effect } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { Auth } from '../auth/auth';
 
 @Directive({
@@ -6,7 +6,7 @@ import { Auth } from '../auth/auth';
   standalone: true
 })
 export class HasPermissionDirective {
-  private templateRef = inject(TemplateRef<any>);
+  private templateRef = inject(TemplateRef<unknown>);
   private viewContainer = inject(ViewContainerRef);
   private auth = inject(Auth);
 

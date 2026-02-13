@@ -1,30 +1,32 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClient, HttpErrorResponse, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { httpErrorInterceptor } from './http-error.interceptor';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
+type MessageAddFn = (value: unknown) => void;
+type TranslateInstantFn = (key: string, params?: Record<string, unknown>) => string;
+
 describe('httpErrorInterceptor', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
-  let messageServiceSpy: { add: any };
-  let translateServiceSpy: { instant: any };
+  let messageServiceSpy: { add: ReturnType<typeof vi.fn<MessageAddFn>> };
+  let translateServiceSpy: { instant: ReturnType<typeof vi.fn<TranslateInstantFn>> };
 
   beforeEach(() => {
-    messageServiceSpy = { add: vi.fn() };
-    translateServiceSpy = { instant: vi.fn() };
+    messageServiceSpy = { add: vi.fn<MessageAddFn>() };
+    translateServiceSpy = { instant: vi.fn<TranslateInstantFn>() };
 
-    // Mock translate.instant to return the key or a specific message based on key
-    translateServiceSpy.instant.mockImplementation((key: string, params?: any) => {
+    translateServiceSpy.instant.mockImplementation((key: string, params?: Record<string, unknown>) => {
         if (key === 'errors.unknown') return 'An unknown error occurred!';
-        if (key === 'errors.network') return `Network Error: ${params?.message}`;
+        if (key === 'errors.network') return `Network Error: ${String(params?.['message'] ?? '')}`;
         if (key === 'errors.unauthorized') return 'Unauthorized access. Please login again.';
         if (key === 'errors.forbidden') return 'You do not have permission to perform this action.';
         if (key === 'errors.notFound') return 'The requested resource was not found.';
         if (key === 'errors.server') return 'Server error. Please try again later.';
-        if (key === 'errors.code') return `Error Code: ${params?.status} Message: ${params?.message}`;
+        if (key === 'errors.code') return `Error Code: ${String(params?.['status'] ?? '')} Message: ${String(params?.['message'] ?? '')}`;
         if (key === 'errors.title') return 'Error';
         return key;
     });

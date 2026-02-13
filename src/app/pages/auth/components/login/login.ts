@@ -56,7 +56,7 @@ export class Login {
                         this.router.navigateByUrl('/dashboard');
                     }
                 },
-                error: (err: any) => console.error('Login failed', err)
+                error: (err: unknown) => console.error('Login failed', err)
             });
     }
   }

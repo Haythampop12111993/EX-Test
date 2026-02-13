@@ -15,13 +15,13 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class RolesFormComponent implements OnChanges {
   @Input() role: Role | null = null;
-  @Input() loading: boolean = false;
+  @Input() loading = false;
   
-  @Output() save = new EventEmitter<Omit<Role, 'id'> | Partial<Role>>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() saved = new EventEmitter<Omit<Role, 'id'> | Partial<Role>>();
+  @Output() cancelled = new EventEmitter<void>();
 
   isEdit = false;
-  initialData: any = {};
+  initialData: Record<string, unknown> = {};
 
   config: FieldConfig[] = [
     {
@@ -40,14 +40,15 @@ export class RolesFormComponent implements OnChanges {
     }
   }
 
-  onSubmit(formData: any) {
+  onSubmit(formData: Record<string, unknown>) {
     // Transform data if necessary
     // Permissions in Role is string[], but select might return string.
     // Ensure compatibility.
     const roleData = { ...formData };
-    if (typeof roleData.permissions === 'string') {
-        roleData.permissions = [roleData.permissions];
+    const permissions = roleData['permissions'];
+    if (typeof permissions === 'string') {
+        roleData['permissions'] = [permissions];
     }
-    this.save.emit(roleData);
+    this.saved.emit(roleData);
   }
 }

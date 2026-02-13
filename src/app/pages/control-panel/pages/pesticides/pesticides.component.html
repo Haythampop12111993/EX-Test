@@ -1,43 +1,44 @@
-
 <div class="p-6">
-
     <p-toast></p-toast>
-    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-    <div>
-        <button pButton label="Add Pest" (click)="onAdd()"></button>
-    </div>
+    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
 
     <app-data-table
-        [title]="'dashboard.controlPanel.pests.title' | translate"
-        [data]="pests()"
+        [title]="'dashboard.controlPanel.pesticides.title' | translate"
+        [data]="pesticides()"
         [cols]="cols"
         [loading]="loading()"
         [serverPagination]="true"
         [totalRecords]="totalRecords()"
-        tableId="pests-table"
+        tableId="pesticides-table"
         [showAddButton]="true"
         [showEditButton]="true"
         [showDeleteButton]="true"
-        [addPermission]="AppPermissions.Pest.Create"
-        [editPermission]="AppPermissions.Pest.Edit"
-        [deletePermission]="AppPermissions.Pest.Delete"
+        [addPermission]="AppPermissions.Pesticide.Create"
+        [editPermission]="AppPermissions.Pesticide.Edit"
+        [deletePermission]="AppPermissions.Pesticide.Delete"
         (pageChange)="onPageChange($event)"
         (add)="onAdd()"
         (edit)="onEdit($event)"
         (delete)="onDelete($event)">
     </app-data-table>
 
-    <p-dialog [(visible)]="displayDialog" [style]="{width: '450px'}" [header]="(selectedPest.id ? 'common.edit' : 'common.add') | translate" [modal]="true" styleClass="p-fluid">
+    <p-dialog
+        [(visible)]="displayDialog"
+        [style]="{ width: '450px' }"
+        [header]="(selectedPesticide.id ? 'common.edit' : 'common.add') | translate"
+        [modal]="true"
+        styleClass="p-fluid">
         <ng-template pTemplate="content">
             <app-dynamic-form
                 [config]="formConfig()"
-                [initialData]="selectedPest"
+                [initialData]="selectedPesticide"
                 [submitLabel]="'common.save'"
                 [cancelLabel]="'common.cancel'"
                 [loading]="saving()"
-                (formSubmit)="savePest($event)"
+                (formSubmit)="savePesticide($event)"
                 (formCancel)="hideDialog()">
             </app-dynamic-form>
         </ng-template>
     </p-dialog>
 </div>
+

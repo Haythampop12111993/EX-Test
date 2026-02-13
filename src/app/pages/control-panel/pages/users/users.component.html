@@ -15,8 +15,8 @@
         @case ('form') {
             <app-users-form
                 [userId]="selectedUserId()"
-                (cancel)="showList()"
-                (save)="onFormSave()">
+                (cancelled)="showList()"
+                (saved)="onFormSave()">
             </app-users-form>
         }
     }

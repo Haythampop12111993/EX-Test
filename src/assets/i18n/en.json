@@ -23,10 +23,59 @@
             "Approve": "Approve Evaluation",
             "Reject": "Reject Evaluation"
         },
+        "Users": {
+            "Create": "Create User",
+            "View": "View Users",
+            "Edit": "Edit User",
+            "Delete": "Delete User"
+        },
+        "Permission": {
+            "View": "View Permissions",
+            "Create": "Create Permission",
+            "Edit": "Edit Permission",
+            "Delete": "Delete Permission"
+        },
+        "Roles": {
+            "Create": "Create Role",
+            "View": "View Roles",
+            "Edit": "Edit Role",
+            "Delete": "Delete Role"
+        },
+        "Pest": {
+            "View": "View Pests",
+            "Create": "Create Pest",
+            "Edit": "Edit Pest",
+            "Delete": "Delete Pest"
+        },
+        "Pesticide": {
+            "View": "View Pesticides",
+            "Create": "Create Pesticide",
+            "Edit": "Edit Pesticide",
+            "Delete": "Delete Pesticide"
+        },
+        "Region": {
+            "View": "View Regions",
+            "Create": "Create Region",
+            "Edit": "Edit Region",
+            "Delete": "Delete Region"
+        },
+        "Area": {
+            "View": "View Areas",
+            "Create": "Create Area",
+            "Edit": "Edit Area",
+            "Delete": "Delete Area"
+        },
         "Groups": {
             "Scouting": "Scouting",
             "Control": "Control",
-            "Evaluation": "Evaluation"
+            "Evaluation": "Evaluation",
+            "Users": "Users",
+            "Permission": "Permissions",
+            "Roles": "Roles",
+            "Pest": "Pests",
+            "Pesticide": "Pesticides",
+            "Region": "Regions",
+            "Area": "Areas"
         },
         "selectAll": "Select All",
         "deselectAll": "Deselect All",
@@ -160,13 +209,20 @@
             },
             "pesticides": {
                 "title": "Pesticides Management",
-                "placeholder": "Manage pesticide inventory and details."
+                "placeholder": "Manage pesticide inventory and details.",
+                "name": "Name",
+                "type": "Type",
+                "form": "Form",
+                "toxicityLevel": "Toxicity Level"
             },
             "pests": {
                 "title": "Pests Management",
                 "placeholder": "Manage pest database and information.",
+                "commonName": "Name",
                 "name": "Scientific Name",
                 "type": "Type",
+                "parent": "Parent Pest",
+                "pesticidesCount": "Pesticides Count",
                 "severity": "Severity",
                 "image": "Image"
             },

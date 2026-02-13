@@ -23,15 +23,15 @@ import { FieldConfig } from '../../../../../../shared/models/field-config.interf
 })
 export class UsersFormComponent implements OnInit {
   @Input() userId: string | null = null;
-  @Output() cancel = new EventEmitter<void>();
-  @Output() save = new EventEmitter<void>();
+  @Output() cancelled = new EventEmitter<void>();
+  @Output() saved = new EventEmitter<void>();
 
   private usersService = inject(UsersService);
   private rolesService = inject(RolesService);
   private messageService = inject(MessageService);
 
   config: FieldConfig[] = [];
-  initialData: any = {};
+  initialData: Record<string, unknown> = {};
   loading = signal(false);
 
   ngOnInit() {
@@ -49,7 +49,7 @@ export class UsersFormComponent implements OnInit {
           this.loading.set(false);
         }
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error loading roles', err);
         this.loading.set(false);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load roles' });
@@ -129,7 +129,7 @@ export class UsersFormComponent implements OnInit {
         this.initialData = { ...user };
         this.loading.set(false);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error loading user', err);
         this.loading.set(false);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load user' });
@@ -137,48 +137,57 @@ export class UsersFormComponent implements OnInit {
     });
   }
 
-  onSubmit(formData: any) {
+  onSubmit(formData: Record<string, unknown>) {
     this.loading.set(true);
+    const data = formData as {
+      fullName?: string;
+      email?: string;
+      phoneNumber?: string;
+      nationalId?: string;
+      password?: string;
+      assignedAreaId?: number;
+      roles?: string[];
+    };
 
     if (this.userId) {
       const request: UpdateUserRequest = {
         id: this.userId,
-        fullName: formData.fullName,
-        email: formData.email,
-        phoneNumber: formData.phoneNumber,
-        assignedAreaId: formData.assignedAreaId,
-        roles: formData.roles
+        fullName: data.fullName ?? '',
+        email: data.email ?? '',
+        phoneNumber: data.phoneNumber ?? '',
+        assignedAreaId: data.assignedAreaId ?? 0,
+        roles: data.roles ?? []
       };
 
       this.usersService.updateUser(request).subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully' });
-          this.save.emit();
+          this.saved.emit();
           this.loading.set(false);
         },
-        error: (err) => {
+        error: () => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update user' });
           this.loading.set(false);
         }
       });
     } else {
       const request: CreateUserRequest = {
-        fullName: formData.fullName,
-        email: formData.email,
-        phoneNumber: formData.phoneNumber,
-        nationalId: formData.nationalId,
-        password: formData.password,
-        assignedAreaId: formData.assignedAreaId,
-        roles: formData.roles
+        fullName: data.fullName ?? '',
+        email: data.email ?? '',
+        phoneNumber: data.phoneNumber ?? '',
+        nationalId: data.nationalId ?? '',
+        password: data.password ?? '',
+        assignedAreaId: data.assignedAreaId ?? 0,
+        roles: data.roles ?? []
       };
 
       this.usersService.createUser(request).subscribe({
         next: () => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User created successfully' });
-          this.save.emit();
+          this.saved.emit();
           this.loading.set(false);
         },
-        error: (err) => {
+        error: () => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create user' });
           this.loading.set(false);
         }
