@@ -15,7 +15,7 @@ import { AppPermissions } from '../../../../../../core/constants/permissions';
 })
 export class UsersListComponent {
   @Input() users: User[] = [];
-  @Input() loading: boolean = false;
+  @Input() loading = false;
   
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<User>();
@@ -31,4 +31,12 @@ export class UsersListComponent {
     { field: 'roles', header: 'dashboard.users.table.roles' },
     { field: 'areaName', header: 'dashboard.users.table.area' }
   ];
+
+  onEdit(row: unknown) {
+    this.edit.emit(row as User);
+  }
+
+  onDelete(row: unknown) {
+    this.delete.emit(row as User);
+  }
 }

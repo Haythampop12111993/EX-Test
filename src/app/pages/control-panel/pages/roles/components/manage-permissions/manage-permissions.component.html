@@ -64,7 +64,11 @@
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @for (claim of group.claims; track claim.value) {
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-500 transition-all duration-200 flex items-center justify-between group cursor-pointer"
-                             (click)="claim.isSelected = !claim.isSelected; updateAllSelectedState()">
+                             role="button"
+                             tabindex="0"
+                             (click)="claim.isSelected = !claim.isSelected; updateAllSelectedState()"
+                             (keydown.enter)="claim.isSelected = !claim.isSelected; updateAllSelectedState()"
+                             (keydown.space)="$event.preventDefault(); claim.isSelected = !claim.isSelected; updateAllSelectedState()">
                             <div class="flex flex-col">
                                 <span class="font-bold text-slate-700 group-hover:text-emerald-600 transition-colors">
                                     {{ claim.value | translate }}
@@ -93,7 +97,7 @@
     <button pButton pRipple 
             [label]="'common.cancel' | translate" 
             class="p-button-text text-slate-500 hover:text-slate-700 font-bold px-6"
-            (click)="cancel.emit()">
+            (click)="cancelled.emit()">
     </button>
     <button pButton pRipple 
             [label]="'common.save' | translate" 

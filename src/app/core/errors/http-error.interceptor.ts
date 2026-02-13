@@ -26,6 +26,22 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         // Client-side or network error
         errorMessage = translate.instant('errors.network', { message: error.error.message });
       } else {
+        const backend = error.error as unknown;
+        const backendRecord = backend && typeof backend === 'object' ? (backend as Record<string, unknown>) : null;
+        const backendMessage =
+          backendRecord && typeof backendRecord['message'] === 'string'
+            ? String(backendRecord['message'])
+            : null;
+
+        const backendErrorsValue = backendRecord ? backendRecord['errors'] : null;
+        const backendErrors = Array.isArray(backendErrorsValue)
+          ? (backendErrorsValue as unknown[])
+              .filter((e: unknown): e is string => typeof e === 'string' && e.trim().length > 0)
+              .join('\n')
+          : null;
+
+        const backendDetail = [backendMessage, backendErrors].filter(Boolean).join('\n') || null;
+
         // Backend returned an unsuccessful response code
         // The response body may contain clues as to what went wrong
         if (error.status === 401) {
@@ -34,12 +50,12 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = translate.instant('errors.forbidden');
             router.navigate(['/access-denied']);
         } else if (error.status === 404) {
-            errorMessage = translate.instant('errors.forbidden');
-            router.navigate(['/access-denied']);
+            errorMessage = translate.instant('errors.notFound');
+            router.navigate(['/not-found']);
         } else if (error.status >= 500) {
             errorMessage = translate.instant('errors.server');
         } else {
-            errorMessage = translate.instant('errors.code', { status: error.status, message: error.message });
+            errorMessage = backendDetail ?? translate.instant('errors.code', { status: error.status, message: error.message });
         }
       }
 

@@ -14,6 +14,14 @@ export interface Column {
     header: string;
 }
 
+export interface DataTablePageChangeEvent {
+    pageIndex: number;
+    pageSize: number;
+    search?: string;
+    sortField?: string;
+    sortOrder?: 1 | -1;
+}
+
 @Component({
   selector: 'app-data-table',
   standalone: true,
@@ -23,15 +31,18 @@ export interface Column {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataTableComponent {
-    @Input() data: any[] = [];
+    @Input() data: unknown[] = [];
     @Input() cols: Column[] = [];
-    @Input() title: string = '';
-    @Input() loading: boolean = false;
-    @Input() tableId: string = 'default-table'; // Unique ID for session storage
-    @Input() showAddButton: boolean = false;
-    @Input() showEditButton: boolean = true;
-    @Input() showDeleteButton: boolean = true;
-    @Input() showPermissionsButton: boolean = false;
+    @Input() title = '';
+    @Input() loading = false;
+    @Input() tableId = 'default-table';
+    @Input() showAddButton = false;
+    @Input() showEditButton = true;
+    @Input() showDeleteButton = true;
+    @Input() showPermissionsButton = false;
+    @Input() serverPagination = false;
+    @Input() totalRecords?: number;
+    @Input() rowsPerPageOptions: number[] = [5, 10, 25, 50, 100, 1000];
 
     // Permissions Inputs
     @Input() addPermission?: string;
@@ -39,23 +50,53 @@ export class DataTableComponent {
     @Input() deletePermission?: string;
     @Input() permissionsPermission?: string;
     
-    @Output() edit = new EventEmitter<any>();
-    @Output() delete = new EventEmitter<any>();
-    @Output() permissions = new EventEmitter<any>();
+    @Output() edit = new EventEmitter<unknown>();
+    @Output() delete = new EventEmitter<unknown>();
+    @Output() permissions = new EventEmitter<unknown>();
     @Output() add = new EventEmitter<void>();
+    @Output() pageChange = new EventEmitter<DataTablePageChangeEvent>();
 
-    first: number = 0;
-    rows: number = 10;
+    first = 0;
+    rows = 10;
 
     @ViewChild('dt') dt!: Table;
 
     private translate = inject(TranslateService);
 
+    onLazyLoad(event: unknown): void {
+        const e = event as Partial<Record<string, unknown>>;
+
+        const first = typeof e['first'] === 'number' ? e['first'] : 0;
+        const rows = typeof e['rows'] === 'number' ? e['rows'] : this.rows;
+        const sortField = typeof e['sortField'] === 'string' ? e['sortField'] : undefined;
+        const sortOrder = e['sortOrder'] === 1 || e['sortOrder'] === -1 ? (e['sortOrder'] as 1 | -1) : undefined;
+
+        const filters = e['filters'] as Record<string, unknown> | undefined;
+        const global = filters?.['global'] as Record<string, unknown> | undefined;
+        const search = typeof global?.['value'] === 'string' ? global['value'] : undefined;
+
+        this.first = first;
+        this.rows = rows;
+
+        this.pageChange.emit({
+            pageIndex: Math.floor(first / rows) + 1,
+            pageSize: rows,
+            search,
+            sortField,
+            sortOrder
+        });
+    }
+
+    getTotalRecords(): number {
+        if (typeof this.totalRecords === 'number') return this.totalRecords;
+        return this.data?.length ?? 0;
+    }
+
     getGlobalFilterFields(): string[] {
         return this.cols.map(col => col.field);
     }
 
-    getStatusClass(value: any, field: string): string {
+    getStatusClass(value: unknown, field: string): string {
         if (!value || (field !== 'status' && field !== 'severity')) return '';
         
         const lowerValue = String(value).toLowerCase();
@@ -77,7 +118,7 @@ export class DataTableComponent {
         return '';
     }
 
-    getDisplayValue(value: any): string {
+    getDisplayValue(value: unknown): string {
         if (value === null || value === undefined || value === '') {
             return this.translate.instant('common.noValue');
         }
@@ -98,21 +139,22 @@ export class DataTableComponent {
         if (!this.data || this.data.length === 0) return;
 
         const exportData = this.data.map(item => {
-            const newItem: Record<string, any> = {};
+            const newItem: Record<string, unknown> = {};
+            const row = item as Record<string, unknown>;
             this.cols.forEach(col => {
                 const header = this.translate.instant(col.header);
-                newItem[header] = item[col.field];
+                newItem[header] = row[col.field];
             });
             return newItem;
         });
 
         const worksheet = XLSX.utils.json_to_sheet(exportData);
         const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' }) as ArrayBuffer;
         this.saveAsExcelFile(excelBuffer, this.title || 'export');
     }
 
-    private saveAsExcelFile(buffer: any, fileName: string): void {
+    private saveAsExcelFile(buffer: ArrayBuffer, fileName: string): void {
         const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
         const EXCEL_EXTENSION = '.xlsx';
         const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });

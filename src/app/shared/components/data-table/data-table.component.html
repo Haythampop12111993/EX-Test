@@ -10,7 +10,7 @@
                 <h3 class="text-lg font-bold text-slate-800 tracking-tight">{{ title | translate }}</h3>
                 @if (data) {
                     <p class="text-xs text-slate-500 font-medium">
-                        {{ data.length }} {{ 'common.records' | translate }}
+                        {{ getTotalRecords() }} {{ 'common.records' | translate }}
                     </p>
                 }
             </div>
@@ -54,9 +54,14 @@
              [value]="data" 
              [columns]="cols"
              [loading]="loading"
+             [lazy]="serverPagination"
+             [lazyLoadOnInit]="serverPagination"
+             [totalRecords]="getTotalRecords()"
+             (onLazyLoad)="onLazyLoad($event)"
              [paginator]="true" 
-             [rows]="10" 
-             [rowsPerPageOptions]="[5, 10, 25, 50, 100, 1000]" 
+             [first]="first"
+             [rows]="rows" 
+             [rowsPerPageOptions]="rowsPerPageOptions" 
              [globalFilterFields]="getGlobalFilterFields()"
              styleClass="p-datatable-modern"
              responsiveLayout="scroll"

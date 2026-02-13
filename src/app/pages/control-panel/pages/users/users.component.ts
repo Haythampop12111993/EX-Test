@@ -80,7 +80,7 @@ export class UsersComponent implements OnInit {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User deleted successfully' });
             this.loadUsers();
           },
-          error: (err) => {
+          error: () => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete user' });
           }
         });

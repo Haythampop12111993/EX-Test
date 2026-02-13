@@ -7,10 +7,6 @@ export interface OperationRecord {
     technician: string;
 }
 
-export interface ScoutingOperation extends OperationRecord {
-    // Add specific fields for scouting if any
-}
+export type ScoutingOperation = OperationRecord;
 
-export interface ControlOperation extends OperationRecord {
-    // Add specific fields for control if any
-}
+export type ControlOperation = OperationRecord;

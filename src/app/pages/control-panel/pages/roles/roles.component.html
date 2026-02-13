@@ -12,15 +12,15 @@
     <app-roles-form
       [role]="selectedRole()"
       [loading]="saving()"
-      (save)="onSave($event)"
-      (cancel)="onCancel()">
+      (saved)="onSave($event)"
+      (cancelled)="onCancel()">
     </app-roles-form>
   } @else if (viewState() === 'permissions') {
     <app-manage-permissions
       [roleId]="selectedRole()?.id || ''"
       [roleNameLabel]="selectedRole()?.name || ''"
-      (save)="onPermissionsSave()"
-      (cancel)="onCancel()">
+      (saved)="onPermissionsSave()"
+      (cancelled)="onCancel()">
     </app-manage-permissions>
   }
 </div>

@@ -24,6 +24,10 @@ export const CONTROL_PANEL_ROUTES: Routes = [
                 loadComponent: () => import('./pages/pests/pests.component').then(m => m.PestsComponent)
             },
             {
+                path: 'pesticides',
+                loadComponent: () => import('./pages/pesticides/pesticides.component').then(m => m.PesticidesComponent)
+            },
+            {
                 path: 'roles',
                 loadComponent: () => import('./pages/roles/roles.component').then(m => m.RolesComponent)
             },

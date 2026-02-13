@@ -1,19 +1,18 @@
-import { ErrorHandler, Injectable, Injector, NgZone } from '@angular/core';
+import { ErrorHandler, Injectable, Injector, NgZone, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private injector: Injector, private zone: NgZone) {}
+  private injector = inject(Injector);
+  private zone = inject(NgZone);
 
-  handleError(error: any): void {
+  handleError(error: unknown): void {
     const messageService = this.injector.get(MessageService);
     const translate = this.injector.get(TranslateService);
 
-    // Always log the error to the console
     console.error('GlobalErrorHandler caught an error:', error);
 
-    // Use NgZone to run the toast display inside the Angular zone
     this.zone.run(() => {
       messageService.add({
         severity: 'error',

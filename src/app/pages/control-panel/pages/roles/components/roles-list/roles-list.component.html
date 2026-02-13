@@ -8,7 +8,7 @@
   [showDeleteButton]="true"
   [showPermissionsButton]="true"
   (add)="add.emit()"
-  (edit)="edit.emit($event)"
-  (delete)="delete.emit($event)"
-  (permissions)="managePermissions.emit($event)">
+  (edit)="edit.emit()"
+  (delete)="onDelete($event)"
+  (permissions)="onManagePermissions($event)">
 </app-data-table>

@@ -1,6 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { of } from 'rxjs';
 
 import { Login } from './login';
+import { Auth } from '../../../../core/auth/auth';
+
+class TestTranslateLoader implements TranslateLoader {
+  getTranslation() {
+    return of({});
+  }
+}
 
 describe('Login', () => {
   let component: Login;
@@ -8,7 +18,16 @@ describe('Login', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Login]
+      imports: [
+        Login,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: TestTranslateLoader }
+        })
+      ],
+      providers: [
+        provideRouter([]),
+        { provide: Auth, useValue: { login: () => of(true) } },
+      ]
     })
     .compileComponents();
 

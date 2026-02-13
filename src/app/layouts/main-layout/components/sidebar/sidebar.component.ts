@@ -59,6 +59,10 @@ import { ButtonModule } from 'primeng/button';
     @if (layoutService.sidebarVisible() && isMobile) {
         <div 
              (click)="layoutService.toggleSidebar()"
+             (keydown.enter)="layoutService.toggleSidebar()"
+             (keydown.space)="$event.preventDefault(); layoutService.toggleSidebar()"
+             role="button"
+             tabindex="0"
              class="fixed inset-0 bg-slate-900/50 z-40 backdrop-blur-sm lg:hidden animate-fade-in">
         </div>
     }
@@ -157,6 +161,11 @@ export class SidebarComponent implements OnInit {
                         label: cp.pests?.title || 'Pests',
                         icon: 'pi pi-exclamation-triangle',
                         routerLink: ['/control-panel', 'pests']
+                    },
+                    {
+                        label: cp.pesticides?.title || 'Pesticides',
+                        icon: 'pi pi-flask',
+                        routerLink: ['/control-panel', 'pesticides']
                     }
                 ]
             }

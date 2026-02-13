@@ -39,12 +39,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
 })
 export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() config: FieldConfig[] = [];
-  @Input() initialData: any = {};
-  @Input() submitLabel: string = 'save';
-  @Input() cancelLabel: string = 'cancel';
-  @Input() loading: boolean = false;
+  @Input() initialData: Record<string, unknown> = {};
+  @Input() submitLabel = 'save';
+  @Input() cancelLabel = 'cancel';
+  @Input() loading = false;
   
-  @Output() formSubmit = new EventEmitter<any>();
+  @Output() formSubmit = new EventEmitter<Record<string, unknown>>();
   @Output() formCancel = new EventEmitter<void>();
 
   form!: FormGroup;
@@ -52,7 +52,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   private cdr = inject(ChangeDetectorRef);
   
   // Store previews for file inputs
-  filePreviews: { [key: string]: string | undefined } = {};
+  filePreviews: Record<string, string | undefined> = {};
 
   ngOnInit() {
     this.createForm();
@@ -81,8 +81,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
           controlValidators.push(Validators.required);
       }
       
-      const value = this.initialData && this.initialData[field.name] !== undefined 
-        ? this.initialData[field.name] 
+      const value = this.initialData && this.initialData[field.name] !== undefined
+        ? this.initialData[field.name]
         : (field.value !== undefined ? field.value : '');
 
       group[field.name] = new FormControl(
@@ -94,12 +94,12 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     this.form = this.fb.group(group);
   }
 
-  onFileSelect(event: any, fieldName: string) {
+  onFileSelect(event: unknown, fieldName: string) {
+    const file = this.getFirstSelectedFile(event);
     // PrimeNG FileUpload onSelect event returns { originalEvent: Event, files: File[] }
     // For basic mode, it might be different depending on version, but usually similar.
     // If using custom upload handler, we get the files.
     
-    const file = event.files[0]; // Assuming single file for now
     if (file) {
       this.form.patchValue({ [fieldName]: file });
       this.form.get(fieldName)?.markAsDirty();
@@ -118,6 +118,14 @@ export class DynamicFormComponent implements OnInit, OnChanges {
         this.cdr.markForCheck();
       }
     }
+  }
+
+  private getFirstSelectedFile(event: unknown): File | null {
+    if (!event || typeof event !== 'object') return null;
+    const maybeFiles = (event as { files?: unknown }).files;
+    if (!Array.isArray(maybeFiles)) return null;
+    const first = maybeFiles[0];
+    return first instanceof File ? first : null;
   }
 
   hasRequiredValidation(field: FieldConfig): boolean {
@@ -148,7 +156,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     });
   }
 
-  isString(value: any): boolean {
+  isString(value: unknown): boolean {
     return typeof value === 'string';
   }
 }

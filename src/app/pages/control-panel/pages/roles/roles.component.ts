@@ -6,7 +6,6 @@ import { RolesFormComponent } from './components/roles-form/roles-form.component
 import { ManagePermissionsComponent } from './components/manage-permissions/manage-permissions.component';
 import { RolesService } from '../../../../core/services/roles.service';
 import { Role } from '../../../../core/models/role.model';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MessageService } from 'primeng/api';
@@ -55,7 +54,7 @@ export class RolesComponent {
 
   onEdit(role: Role) {
     // Edit is not supported by API
-    this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Edit is not supported for roles' });
+    this.messageService.add({ severity: 'info', summary: 'Info', detail: `Edit is not supported for role "${role.name}"` });
   }
 
   onManagePermissions(role: Role) {
@@ -85,12 +84,12 @@ export class RolesComponent {
     }
   }
 
-  onSave(roleData: any) {
+  onSave(roleData: Record<string, unknown>) {
     this.saving.set(true);
     
     // API only supports creating roles with roleName
     const createRequest = {
-        roleName: roleData.roleName
+        roleName: String(roleData['roleName'] ?? '')
     };
 
     this.rolesService.createRole(createRequest)

@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class RolesListComponent {
   @Input() roles: Role[] = [];
-  @Input() loading: boolean = false;
+  @Input() loading = false;
   
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<Role>();
@@ -24,4 +24,12 @@ export class RolesListComponent {
   cols: Column[] = [
     { field: 'name', header: 'dashboard.table.headers.roleName' }
   ];
+
+  onDelete(row: unknown) {
+    this.delete.emit(row as Role);
+  }
+
+  onManagePermissions(row: unknown) {
+    this.managePermissions.emit(row as Role);
+  }
 }
