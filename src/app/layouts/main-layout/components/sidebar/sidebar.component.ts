@@ -74,18 +74,39 @@ import { ButtonModule } from 'primeng/button';
     .hidden-sidebar {
         /* Handled via classes */
     }
+    ::ng-deep .p-panelmenu .p-panelmenu-header-action,
+    ::ng-deep .p-panelmenu .p-panelmenu-header-link,
+    ::ng-deep .p-panelmenu .p-panelmenu-item-link,
+    ::ng-deep .p-panelmenu .p-menuitem-link {
+        display: flex;
+        align-items: center;
+    }
+    ::ng-deep .p-panelmenu .p-panelmenu-item-icon,
+    ::ng-deep .p-panelmenu .p-menuitem-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        margin-inline-end: 0.75rem;
+        flex: 0 0 auto;
+        font-size: 1rem;
+        color: rgb(100 116 139);
+    }
     ::ng-deep .p-panelmenu .p-panelmenu-header-content {
         @apply border-none bg-transparent mb-1 rounded-xl transition-all duration-200 !important;
     }
-    ::ng-deep .p-panelmenu .p-panelmenu-header-action {
+    ::ng-deep .p-panelmenu .p-panelmenu-header-action,
+    ::ng-deep .p-panelmenu .p-panelmenu-header-link {
         @apply font-semibold text-slate-600 py-3 px-4 hover:bg-brand-50 hover:text-brand-600 rounded-xl transition-all !important;
     }
     ::ng-deep .p-panelmenu .p-panelmenu-content {
         @apply border-none bg-transparent py-1 !important;
     }
+    ::ng-deep .p-panelmenu .p-panelmenu-item-link,
     ::ng-deep .p-panelmenu .p-menuitem-link {
         @apply py-2.5 px-8 rounded-lg text-slate-500 hover:text-brand-600 hover:bg-brand-50/50 transition-all !important;
     }
+    ::ng-deep .p-panelmenu .p-panelmenu-item-label,
     ::ng-deep .p-panelmenu .p-menuitem-text {
         @apply font-medium !important;
     }
@@ -164,8 +185,18 @@ export class SidebarComponent implements OnInit {
                     },
                     {
                         label: cp.pesticides?.title || 'Pesticides',
-                        icon: 'pi pi-flask',
+                        icon: 'pi pi-filter-fill',
                         routerLink: ['/control-panel', 'pesticides']
+                    },
+                    {
+                        label: cp.inventory?.title || 'Inventory',
+                        icon: 'pi pi-box',
+                        routerLink: ['/control-panel', 'inventory']
+                    },
+                    {
+                        label: cp.areas?.title || 'Areas',
+                        icon: 'pi pi-map',
+                        routerLink: ['/control-panel', 'areas']
                     }
                 ]
             }

@@ -12,12 +12,12 @@ export class InventoryService {
     private http = inject(HttpClient);
     private apiUrl = `${environment.apiUrl}/Inventory`;
 
-    mix(payload: MixRequest): Observable<void> {
-        return this.http.post<ApiResponse<unknown> | unknown>(`${this.apiUrl}/mix`, payload).pipe(map(() => undefined));
+    mix(payload: MixRequest): Observable<boolean> {
+        return this.http.post<ApiResponse<boolean> | boolean>(`${this.apiUrl}/mix`, payload).pipe(map(unwrapApiResponse));
     }
 
-    consume(payload: ConsumeRequest): Observable<void> {
-        return this.http.post<ApiResponse<unknown> | unknown>(`${this.apiUrl}/consume`, payload).pipe(map(() => undefined));
+    consume(payload: ConsumeRequest): Observable<boolean> {
+        return this.http.post<ApiResponse<boolean> | boolean>(`${this.apiUrl}/consume`, payload).pipe(map(unwrapApiResponse));
     }
 
     getMyReadyStocks(): Observable<ReadyStockItem[]> {
@@ -30,13 +30,13 @@ export class InventoryService {
             .set('pestId', String(params.pestId));
 
         return this.http
-            .get<ApiResponse<QuantityCheckResult> | QuantityCheckResult>(`${this.apiUrl}/quantity-check`, { params: httpParams })
+            .get<ApiResponse<number> | number>(`${this.apiUrl}/quantity-check`, { params: httpParams })
             .pipe(map(unwrapApiResponse));
     }
 
     getRawStockQuantity(pesticideId: EntityId): Observable<RawStockQuantityResult> {
         return this.http
-            .get<ApiResponse<RawStockQuantityResult> | RawStockQuantityResult>(`${this.apiUrl}/raw-stock-quantity/${pesticideId}`)
+            .get<ApiResponse<number> | number>(`${this.apiUrl}/raw-stock-quantity/${pesticideId}`)
             .pipe(map(unwrapApiResponse));
     }
 }

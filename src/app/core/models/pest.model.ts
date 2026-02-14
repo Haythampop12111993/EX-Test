@@ -5,6 +5,11 @@ export interface PestLookupItem {
     name: string;
 }
 
+export interface PestTypeLookupItem {
+    id: EntityId;
+    name: string;
+}
+
 export interface PestListItem {
     id: EntityId;
     name: string;

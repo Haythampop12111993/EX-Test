@@ -63,6 +63,12 @@
             "Edit": "تعديل منطقة",
             "Delete": "حذف منطقة"
         },
+        "Inventory": {
+            "View": "عرض المخزون",
+            "Mix": "خلط المخزون",
+            "Consume": "استهلاك المخزون",
+            "Check": "فحص المخزون"
+        },
         "Groups": {
             "Scouting": "الاستكشاف",
             "Control": "المكافحة",
@@ -73,7 +79,8 @@
             "Pest": "الآفات",
             "Pesticide": "المبيدات",
             "Region": "الأقاليم",
-            "Area": "المنطقة"
+            "Area": "المنطقة",
+            "Inventory": "المخزون"
         },
         "selectAll": "تحديد الكل",
         "deselectAll": "إلغاء تحديد الكل",
@@ -94,6 +101,7 @@
         "delete": "حذف",
         "save": "حفظ",
         "add": "إضافة",
+        "all": "الكل",
         "required": "حقل مطلوب",
         "cancel": "إلغاء",
         "confirm": "تأكيد",
@@ -211,7 +219,65 @@
                 "name": "الاسم",
                 "type": "النوع",
                 "form": "الشكل",
-                "toxicityLevel": "مستوى السُمّية"
+                "toxicityLevel": "مستوى السُمّية",
+                "activeIngredient": "المادة الفعالة",
+                "toxicity": "السُمية",
+                "stockQuantity": "الكمية بالمخزون",
+                "requiresSensitivityTest": "يتطلب اختبار حساسية",
+                "allergyWarning": "تحذير الحساسية",
+                "sensitivityTestFile": "ملف اختبار الحساسية",
+                "concentration": "التركيز",
+                "safetyInstructions": "إرشادات السلامة",
+                "targetPests": "الآفات المستهدفة",
+                "pest": "الآفة",
+                "dilutionRate": "معدل التخفيف"
+            },
+            "inventory": {
+                "title": "المخزون",
+                "placeholder": "خلط، استهلاك، وفحص الكميات.",
+                "tabs": {
+                    "readyStocks": "المخزون الجاهز",
+                    "mix": "خلط",
+                    "quantityCheck": "فحص الكمية",
+                    "rawStock": "المخزون الخام"
+                },
+                "readyStocksTitle": "المخزون الجاهز",
+                "pesticide": "المبيد",
+                "pest": "الآفة",
+                "area": "المنطقة",
+                "totalLitersAvailable": "إجمالي اللترات المتاحة",
+                "rawQuantity": "الكمية الخام",
+                "litersUsed": "اللترات المستخدمة",
+                "availableQuantity": "الكمية المتاحة",
+                "mixTitle": "خلط المخزون",
+                "quantityCheckTitle": "فحص الكمية",
+                "rawStockTitle": "كمية المخزون الخام",
+                "consumeDialogTitle": "استهلاك المخزون",
+                "mix": "خلط",
+                "consume": "استهلاك",
+                "check": "فحص",
+                "validation": {
+                    "minQuantity": "يجب أن تكون القيمة أكبر من 0",
+                    "maxLiters": "اللترات المستخدمة لا يمكن أن تتجاوز المتاح"
+                },
+                "messages": {
+                    "mixedSuccessfully": "تم الخلط بنجاح",
+                    "consumedSuccessfully": "تم الاستهلاك بنجاح",
+                    "confirmConsume": "هل أنت متأكد من استهلاك هذا المخزون؟"
+                }
+            },
+            "regions": {
+                "title": "إدارة المحافظات",
+                "placeholder": "إدارة المحافظات.",
+                "name": "اسم المحافظة"
+            },
+            "areas": {
+                "title": "إدارة المناطق",
+                "placeholder": "إدارة المناطق وربطها بالمحافظات.",
+                "name": "اسم المنطقة",
+                "region": "المحافظة",
+                "regionName": "المحافظة",
+                "filterRegion": "تصفية حسب المحافظة"
             },
             "pests": {
                 "title": "إدارة الآفات",
@@ -221,6 +287,9 @@
                 "type": "النوع",
                 "parent": "الآفة الأم",
                 "pesticidesCount": "عدد المبيدات",
+                "pesticides": "المبيدات",
+                "noPesticides": "لا توجد مبيدات مرتبطة",
+                "children": "التفرعات",
                 "severity": "الخطورة",
                 "image": "صورة"
             },

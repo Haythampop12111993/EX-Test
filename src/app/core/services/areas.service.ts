@@ -19,6 +19,10 @@ export class AreasService {
         return this.http.get<ApiResponse<Area[]> | Area[]>(this.apiUrl, { params }).pipe(map(unwrapApiResponse));
     }
 
+    getAreaById(id: EntityId): Observable<Area> {
+        return this.http.get<ApiResponse<Area> | Area>(`${this.apiUrl}/${id}`).pipe(map(unwrapApiResponse));
+    }
+
     createArea(payload: AreaCreateRequest): Observable<void> {
         return this.http.post<ApiResponse<unknown> | unknown>(this.apiUrl, payload).pipe(map(() => undefined));
     }

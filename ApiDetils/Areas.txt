@@ -1,0 +1,293 @@
+Areas
+
+
+GET
+/api/Areas
+
+Parameters
+Try it out
+Name	Description
+regionId
+integer($int32)
+(query)
+regionId
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+text/plain
+Controls Accept header.
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": [
+    {
+      "id": 0,
+      "name": "string",
+      "regionId": 0,
+      "regionName": "string"
+    }
+  ]
+}
+No links
+404	
+Not Found
+
+Media type
+
+text/plain
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": "string"
+}
+No links
+
+POST
+/api/Areas
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "id": 0,
+  "name": "string",
+  "regionId": 0,
+  "regionName": "string"
+}
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+text/plain
+Controls Accept header.
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": {
+    "id": 0,
+    "name": "string",
+    "regionId": 0,
+    "regionName": "string"
+  }
+}
+No links
+400	
+Bad Request
+
+Media type
+
+text/plain
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": "string"
+}
+No links
+
+GET
+/api/Areas/{id}
+
+Parameters
+Try it out
+Name	Description
+id *
+integer($int32)
+(path)
+id
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+text/plain
+Controls Accept header.
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": {
+    "id": 0,
+    "name": "string",
+    "regionId": 0,
+    "regionName": "string"
+  }
+}
+No links
+404	
+Not Found
+
+Media type
+
+text/plain
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": "string"
+}
+No links
+
+PUT
+/api/Areas/{id}
+
+Parameters
+Try it out
+Name	Description
+id *
+integer($int32)
+(path)
+id
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "id": 0,
+  "name": "string",
+  "regionId": 0,
+  "regionName": "string"
+}
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+text/plain
+Controls Accept header.
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": {
+    "id": 0,
+    "name": "string",
+    "regionId": 0,
+    "regionName": "string"
+  }
+}
+No links
+404	
+Not Found
+
+Media type
+
+text/plain
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": "string"
+}
+No links
+
+DELETE
+/api/Areas/{id}
+
+Parameters
+Try it out
+Name	Description
+id *
+integer($int32)
+(path)
+id
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+text/plain
+Controls Accept header.
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": true
+}
+No links
+400	
+Bad Request
+
+Media type
+
+text/plain
+Example Value
+Schema
+{
+  "statusCode": 0,
+  "succeeded": true,
+  "message": "string",
+  "errors": [
+    "string"
+  ],
+  "data": "string"
+}
+No links

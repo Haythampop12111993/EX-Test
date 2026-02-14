@@ -1,21 +1,27 @@
 import { Component, ChangeDetectionStrategy, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Validators } from '@angular/forms';
+import { FormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { DataTableComponent, Column, DataTablePageChangeEvent } from '../../../../shared/components/data-table/data-table.component';
 import { DynamicFormComponent } from '../../../../shared/components/dynamic-form/dynamic-form.component';
 import { FieldConfig } from '../../../../shared/models/field-config.interface';
 import { Pest } from '../../../../shared/models/pest.interface';
 import { PestsService } from '../../../../core/services/pests.service';
-import { EntityId, PestCreateRequest, PestListItem, PestLookupItem } from '../../../../core/models/pest.model';
+import { EntityId, PestCreateRequest, PestListItem, PestLookupItem, PestTypeLookupItem } from '../../../../core/models/pest.model';
 import { AppPermissions } from '../../../../core/constants/permissions';
+import { PesticidesService } from '../../../../core/services/pesticides.service';
+import { PesticideListItem } from '../../../../core/models/pesticide.model';
+import { HasPermissionDirective } from '../../../../core/directives/has-permission.directive';
 
 // PrimeNG Imports
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
 
 interface PestRow {
     id: string;
@@ -32,17 +38,33 @@ interface PestRow {
     image?: Pest['image'];
 }
 
+interface PestPesticideRow {
+    pesticideId: EntityId;
+    pesticideName: string;
+    dilutionRate: number;
+}
+
+interface PesticideLookupRow {
+    id: EntityId;
+    name: string;
+}
+
 @Component({
   selector: 'app-pests',
   standalone: true,
   imports: [
     CommonModule, 
+    FormsModule,
     TranslateModule, 
     DataTableComponent,
     DynamicFormComponent,
     DialogModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    ButtonModule,
+    SelectModule,
+    InputNumberModule,
+    HasPermissionDirective
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './pests.component.html',
@@ -54,19 +76,29 @@ export class PestsComponent implements OnInit {
     private messageService = inject(MessageService);
     private translate = inject(TranslateService);
     private pestsService = inject(PestsService);
+    private pesticidesService = inject(PesticidesService);
 
     protected readonly AppPermissions = AppPermissions;
 
     loading = signal(false);
     saving = signal(false);
     displayDialog = false;
+    detailsLoading = signal(false);
+    pesticidesSaving = signal(false);
 
     pests = signal<PestRow[]>([]);
     totalRecords = signal(0);
     parents = signal<PestLookupItem[]>([]);
+    pestTypes = signal<PestTypeLookupItem[]>([]);
+    pesticidesLookup = signal<PesticideLookupRow[]>([]);
+    pestPesticides = signal<PestPesticideRow[]>([]);
+    pestChildren = signal<PestListItem[]>([]);
     selectedPest: Partial<PestRow> = {};
     lastQuery = signal<DataTablePageChangeEvent | null>(null);
     
+    newPesticideId: EntityId | null = null;
+    newDilutionRate: number | null = null;
+
     cols: Column[] = [
         { field: 'id', header: 'dashboard.table.headers.id' },
         { field: 'name', header: 'dashboard.controlPanel.pests.commonName' },
@@ -76,8 +108,12 @@ export class PestsComponent implements OnInit {
         { field: 'pesticidesCount', header: 'dashboard.controlPanel.pests.pesticidesCount' }
     ];
 
+    pesticideOptions = computed(() => this.pesticidesLookup().map((x) => ({ label: x.name, value: x.id })));
+    pestTypeOptions = computed(() => this.pestTypes().map((x) => ({ label: x.name, value: x.name })));
+
     formConfig = computed<FieldConfig[]>(() => {
         const parentOptions = this.parents().map((x) => ({ label: x.name, value: x.id }));
+        const typeOptions = this.pestTypeOptions();
 
         return [
             {
@@ -95,9 +131,10 @@ export class PestsComponent implements OnInit {
                 gridClass: 'col-span-12 md:col-span-6'
             },
             {
-                type: 'text',
+                type: 'select',
                 name: 'type',
                 label: 'dashboard.controlPanel.pests.type',
+                options: typeOptions,
                 gridClass: 'col-span-12 md:col-span-6'
             },
             {
@@ -121,17 +158,30 @@ export class PestsComponent implements OnInit {
             next: (items) => this.parents.set(items ?? []),
             error: () => this.parents.set([])
         });
+
+        this.pestsService.getPestTypes().subscribe({
+            next: (items) => this.pestTypes.set(items ?? []),
+            error: () => this.pestTypes.set([])
+        });
+
+        this.pesticidesService.getPesticides({ PageIndex: 1, PageSize: 1000 }).subscribe({
+            next: (paged) => this.pesticidesLookup.set((paged.data ?? []).map((x) => this.mapPesticideToLookup(x))),
+            error: () => this.pesticidesLookup.set([])
+        });
     }
 
     onAdd() {
         this.selectedPest = {};
+        this.resetPesticideManagement();
         this.displayDialog = true;
     }
 
     onEdit(pest: unknown) {
         if (!this.isPest(pest)) return;
         this.selectedPest = { ...pest };
+        this.resetPesticideManagement();
         this.displayDialog = true;
+        this.loadPestDetails();
     }
 
     onDelete(pest: unknown) {
@@ -210,6 +260,111 @@ export class PestsComponent implements OnInit {
 
     hideDialog() {
         this.displayDialog = false;
+        this.resetPesticideManagement();
+    }
+
+    addPesticideToPest(): void {
+        if (!this.selectedPest.id) return;
+        if (this.newPesticideId === null || this.newPesticideId === undefined) return;
+        if (this.newDilutionRate === null || this.newDilutionRate === undefined) return;
+
+        this.pesticidesSaving.set(true);
+        this.pestsService
+            .assignPesticide({
+                pestId: this.selectedPest.id,
+                pesticideId: this.newPesticideId,
+                dilutionRate: this.newDilutionRate
+            })
+            .pipe(finalize(() => this.pesticidesSaving.set(false)))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('common.success'),
+                        detail: this.translate.instant('common.savedSuccessfully')
+                    });
+                    this.newPesticideId = null;
+                    this.newDilutionRate = null;
+                    this.loadPestDetails();
+                    this.reload();
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('common.error'),
+                        detail: this.translate.instant('common.error')
+                    });
+                }
+            });
+    }
+
+    saveDilutionRate(row: PestPesticideRow): void {
+        if (!this.selectedPest.id) return;
+        if (!Number.isFinite(row.dilutionRate) || row.dilutionRate <= 0) return;
+
+        this.pesticidesSaving.set(true);
+        this.pestsService
+            .updateDilutionRate({
+                pestId: this.selectedPest.id,
+                pesticideId: row.pesticideId,
+                dilutionRate: row.dilutionRate
+            })
+            .pipe(finalize(() => this.pesticidesSaving.set(false)))
+            .subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: this.translate.instant('common.success'),
+                        detail: this.translate.instant('common.savedSuccessfully')
+                    });
+                    this.loadPestDetails();
+                },
+                error: () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: this.translate.instant('common.error'),
+                        detail: this.translate.instant('common.error')
+                    });
+                }
+            });
+    }
+
+    removePesticide(row: PestPesticideRow): void {
+        if (!this.selectedPest.id) return;
+
+        this.confirmationService.confirm({
+            message: this.translate.instant('common.confirmDelete'),
+            header: this.translate.instant('common.confirmDeleteTitle'),
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: this.translate.instant('common.yes'),
+            rejectLabel: this.translate.instant('common.no'),
+            acceptButtonStyleClass: 'p-button-danger p-button-text',
+            rejectButtonStyleClass: 'p-button-text p-button-plain',
+            accept: () => {
+                this.pesticidesSaving.set(true);
+                this.pestsService
+                    .removePesticide({ pestId: this.selectedPest.id!, pesticideId: row.pesticideId })
+                    .pipe(finalize(() => this.pesticidesSaving.set(false)))
+                    .subscribe({
+                        next: () => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: this.translate.instant('common.success'),
+                                detail: this.translate.instant('common.deletedSuccessfully')
+                            });
+                            this.loadPestDetails();
+                            this.reload();
+                        },
+                        error: () => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: this.translate.instant('common.error'),
+                                detail: this.translate.instant('common.error')
+                            });
+                        }
+                    });
+            }
+        });
     }
 
     private isPest(value: unknown): value is { id: string; name: string } {
@@ -252,6 +407,32 @@ export class PestsComponent implements OnInit {
         this.loadPests({ pageIndex: 1, pageSize: 10 });
     }
 
+    private loadPestDetails(): void {
+        const id = this.selectedPest.id;
+        if (!id) return;
+
+        this.detailsLoading.set(true);
+        this.pestsService
+            .getPestById(id)
+            .pipe(finalize(() => this.detailsLoading.set(false)))
+            .subscribe({
+                next: (details) => {
+                    const anyDetails = details as unknown as Record<string, unknown>;
+                    const pesticides = this.mapApiPesticides(anyDetails['pesticides']);
+                    this.pestPesticides.set(pesticides);
+
+                    this.pestsService.getPestChildren(id).subscribe({
+                        next: (children) => this.pestChildren.set(children ?? []),
+                        error: () => this.pestChildren.set([])
+                    });
+                },
+                error: () => {
+                    this.pestPesticides.set([]);
+                    this.pestChildren.set([]);
+                }
+            });
+    }
+
     private mapApiPestToRow(pest: PestListItem): PestRow {
         const anyPest = pest as unknown as Record<string, unknown>;
         const id = typeof anyPest['id'] === 'string' || typeof anyPest['id'] === 'number' ? String(anyPest['id']) : '';
@@ -290,5 +471,42 @@ export class PestsComponent implements OnInit {
             status,
             image
         };
+    }
+
+    private resetPesticideManagement(): void {
+        this.detailsLoading.set(false);
+        this.pesticidesSaving.set(false);
+        this.newPesticideId = null;
+        this.newDilutionRate = null;
+        this.pestPesticides.set([]);
+        this.pestChildren.set([]);
+    }
+
+    private mapPesticideToLookup(item: PesticideListItem): PesticideLookupRow {
+        const anyItem = item as unknown as Record<string, unknown>;
+        const id = (typeof anyItem['id'] === 'string' || typeof anyItem['id'] === 'number' ? anyItem['id'] : '') as EntityId;
+        const name = typeof anyItem['name'] === 'string' ? anyItem['name'] : '';
+        return { id, name };
+    }
+
+    private mapApiPesticides(value: unknown): PestPesticideRow[] {
+        if (!Array.isArray(value)) return [];
+        return value
+            .map((x) => {
+                if (!x || typeof x !== 'object') return null;
+                const v = x as Record<string, unknown>;
+                const pesticideId =
+                    (typeof v['pesticideId'] === 'string' || typeof v['pesticideId'] === 'number'
+                        ? v['pesticideId']
+                        : typeof v['id'] === 'string' || typeof v['id'] === 'number'
+                          ? v['id']
+                          : null) as EntityId | null;
+                const pesticideName = typeof v['pesticideName'] === 'string' ? v['pesticideName'] : typeof v['name'] === 'string' ? v['name'] : '';
+                const dilutionRate = typeof v['dilutionRate'] === 'number' ? v['dilutionRate'] : Number(v['dilutionRate']);
+                if (pesticideId === null) return null;
+                if (!Number.isFinite(dilutionRate)) return null;
+                return { pesticideId, pesticideName, dilutionRate };
+            })
+            .filter((x): x is PestPesticideRow => x !== null);
     }
 }

@@ -28,6 +28,14 @@ export const CONTROL_PANEL_ROUTES: Routes = [
                 loadComponent: () => import('./pages/pesticides/pesticides.component').then(m => m.PesticidesComponent)
             },
             {
+                path: 'inventory',
+                loadComponent: () => import('./pages/inventory/inventory.component').then(m => m.InventoryComponent)
+            },
+            {
+                path: 'areas',
+                loadComponent: () => import('./pages/areas/areas.component').then(m => m.AreasComponent)
+            },
+            {
                 path: 'roles',
                 loadComponent: () => import('./pages/roles/roles.component').then(m => m.RolesComponent)
             },

@@ -1,0 +1,138 @@
+<div class="p-6 space-y-4">
+    <p-toast></p-toast>
+    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+    <p-tabs value="regions">
+        <p-tablist>
+            <p-tab value="regions">{{ 'dashboard.controlPanel.regions.title' | translate }}</p-tab>
+            <p-tab value="areas">{{ 'dashboard.controlPanel.areas.title' | translate }}</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="regions">
+                <div class="space-y-4">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+                            <i class="pi pi-globe text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-slate-800">{{ 'dashboard.controlPanel.regions.title' | translate }}</div>
+                            <div class="text-xs text-slate-500">{{ 'dashboard.controlPanel.regions.placeholder' | translate }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <app-data-table
+                    [title]="'dashboard.controlPanel.regions.title' | translate"
+                    [data]="regions()"
+                    [cols]="regionCols"
+                    [loading]="regionsLoading()"
+                    [serverPagination]="false"
+                    tableId="regions-table"
+                    [showAddButton]="true"
+                    [showEditButton]="true"
+                    [showDeleteButton]="true"
+                    [addPermission]="AppPermissions.Region.Create"
+                    [editPermission]="AppPermissions.Region.Edit"
+                    [deletePermission]="AppPermissions.Region.Delete"
+                    (add)="onAddRegion()"
+                    (edit)="onEditRegion($event)"
+                    (delete)="onDeleteRegion($event)">
+                </app-data-table>
+
+                <p-dialog
+                    [(visible)]="displayRegionDialog"
+                    [style]="{ width: '450px' }"
+                    [modal]="true"
+                    [draggable]="false"
+                    [resizable]="false"
+                    [header]="(selectedRegion.id ? 'common.edit' : 'common.add') | translate"
+                    styleClass="p-fluid">
+                    <ng-template pTemplate="content">
+                        <app-dynamic-form
+                            [config]="regionFormConfig()"
+                            [initialData]="selectedRegion"
+                            [submitLabel]="'common.save'"
+                            [cancelLabel]="'common.cancel'"
+                            [loading]="regionsSaving()"
+                            (formSubmit)="saveRegion($event)"
+                            (formCancel)="hideRegionDialog()">
+                        </app-dynamic-form>
+                    </ng-template>
+                </p-dialog>
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="areas">
+                <div class="space-y-4">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+                                <i class="pi pi-map text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-800">{{ 'dashboard.controlPanel.areas.title' | translate }}</div>
+                                <div class="text-xs text-slate-500">{{ 'dashboard.controlPanel.areas.placeholder' | translate }}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <div class="w-full md:w-72">
+                                <p-select
+                                    [options]="regionOptions()"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [ngModel]="filterRegionId()"
+                                    (ngModelChange)="onFilterRegionChange($event)"
+                                    [placeholder]="'dashboard.controlPanel.areas.filterRegion' | translate"
+                                    styleClass="w-full">
+                                </p-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <app-data-table
+                    [title]="'dashboard.controlPanel.areas.title' | translate"
+                    [data]="areas()"
+                    [cols]="cols"
+                    [loading]="loading()"
+                    [serverPagination]="false"
+                    tableId="areas-table"
+                    [showAddButton]="true"
+                    [showEditButton]="true"
+                    [showDeleteButton]="true"
+                    [addPermission]="AppPermissions.Area.Create"
+                    [editPermission]="AppPermissions.Area.Edit"
+                    [deletePermission]="AppPermissions.Area.Delete"
+                    (add)="onAdd()"
+                    (edit)="onEdit($event)"
+                    (delete)="onDelete($event)">
+                </app-data-table>
+
+                <p-dialog
+                    [(visible)]="displayDialog"
+                    [style]="{ width: '450px' }"
+                    [modal]="true"
+                    [draggable]="false"
+                    [resizable]="false"
+                    [header]="(selectedArea.id ? 'common.edit' : 'common.add') | translate"
+                    styleClass="p-fluid">
+                    <ng-template pTemplate="content">
+                        <app-dynamic-form
+                            [config]="formConfig()"
+                            [initialData]="selectedArea"
+                            [submitLabel]="'common.save'"
+                            [cancelLabel]="'common.cancel'"
+                            [loading]="saving()"
+                            (formSubmit)="saveArea($event)"
+                            (formCancel)="hideDialog()">
+                        </app-dynamic-form>
+                    </ng-template>
+                </p-dialog>
+                </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>

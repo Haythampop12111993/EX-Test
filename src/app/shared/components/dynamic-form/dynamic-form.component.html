@@ -109,10 +109,21 @@
                             </div>
                         }
 
-                        @if (!filePreviews[field.name] && isString(form.get(field.name)?.value) && form.get(field.name)?.value) {
+                        @if (!filePreviews[field.name] && isString(form.get(field.name)?.value) && form.get(field.name)?.value && isImageUrl(form.get(field.name)?.value)) {
                              <div class="mt-2 border border-slate-200 rounded p-2 inline-block bg-slate-50">
                                 <p-image [src]="form.get(field.name)?.value" alt="Existing" width="100" [preview]="true"></p-image>
                             </div>
+                        }
+
+                        @if (!filePreviews[field.name] && isString(form.get(field.name)?.value) && form.get(field.name)?.value && !isImageUrl(form.get(field.name)?.value)) {
+                            <a
+                                class="mt-2 inline-flex items-center gap-2 text-sm text-emerald-700 hover:text-emerald-800 font-semibold"
+                                [href]="form.get(field.name)?.value"
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <i class="pi pi-external-link"></i>
+                                <span>{{ 'common.view' | translate }}</span>
+                            </a>
                         }
                     </div>
                 }
@@ -137,20 +148,26 @@
         </div>
     }
 
-    <!-- Buttons -->
-    <div class="col-span-12 flex justify-end gap-2 mt-4">
-        <button pButton pRipple 
-                type="button" 
-                [label]="cancelLabel | translate" 
-                icon="pi pi-times" 
-                class="p-button-text" 
+    @if (showActions) {
+        <div class="col-span-12 flex justify-end gap-3 mt-6 pt-4 border-t border-slate-100">
+            <button
+                pButton
+                pRipple
+                type="button"
+                [label]="cancelLabel | translate"
+                icon="pi pi-times"
+                class="p-button-text text-slate-600 hover:text-slate-800 font-bold px-6"
                 (click)="onCancel()">
-        </button>
-        <button pButton pRipple 
-                type="submit" 
-                [label]="submitLabel | translate" 
-                icon="pi pi-check" 
+            </button>
+            <button
+                pButton
+                pRipple
+                type="submit"
+                [label]="submitLabel | translate"
+                icon="pi pi-save"
+                class="p-button-primary bg-emerald-600 border-emerald-600 hover:bg-emerald-700 font-bold px-8 shadow-lg shadow-emerald-200"
                 [loading]="loading">
-        </button>
-    </div>
+            </button>
+        </div>
+    }
 </form>

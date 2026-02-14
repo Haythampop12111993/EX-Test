@@ -15,11 +15,13 @@ export interface Area {
     id: EntityId;
     name: string;
     regionId?: EntityId;
+    regionName?: string;
 }
 
 export interface AreaCreateRequest {
     name: string;
     regionId: EntityId;
+    regionName?: string;
 }
 
 export type AreaUpdateRequest = AreaCreateRequest;
