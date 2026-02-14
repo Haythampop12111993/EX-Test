@@ -13,21 +13,12 @@ export interface ConsumeRequest {
 
 export interface ReadyStockItem {
     id: EntityId;
-    pesticideId?: EntityId;
-    pesticideName?: string;
-    pestId?: EntityId;
-    pestName?: string;
-    availableLiters?: number;
+    pesticideName: string;
+    pestName: string;
+    totalLitersAvailable: number;
+    areaName: string;
 }
 
-export interface QuantityCheckResult {
-    pesticideId: EntityId;
-    pestId: EntityId;
-    isEnough?: boolean;
-    availableQuantity?: number;
-}
+export type QuantityCheckResult = number;
 
-export interface RawStockQuantityResult {
-    pesticideId: EntityId;
-    availableQuantity?: number;
-}
+export type RawStockQuantityResult = number;

@@ -65,6 +65,12 @@
             "Edit": "Edit Area",
             "Delete": "Delete Area"
         },
+        "Inventory": {
+            "View": "View Inventory",
+            "Mix": "Mix Inventory",
+            "Consume": "Consume Inventory",
+            "Check": "Inventory Check"
+        },
         "Groups": {
             "Scouting": "Scouting",
             "Control": "Control",
@@ -75,7 +81,8 @@
             "Pest": "Pests",
             "Pesticide": "Pesticides",
             "Region": "Regions",
-            "Area": "Areas"
+            "Area": "Areas",
+            "Inventory": "Inventory"
         },
         "selectAll": "Select All",
         "deselectAll": "Deselect All",
@@ -96,6 +103,7 @@
         "delete": "Delete",
         "save": "Save",
         "add": "Add",
+        "all": "All",
         "required": "Required field",
         "cancel": "Cancel",
         "confirm": "Confirm",
@@ -213,7 +221,65 @@
                 "name": "Name",
                 "type": "Type",
                 "form": "Form",
-                "toxicityLevel": "Toxicity Level"
+                "toxicityLevel": "Toxicity Level",
+                "activeIngredient": "Active Ingredient",
+                "toxicity": "Toxicity",
+                "stockQuantity": "Stock Quantity",
+                "requiresSensitivityTest": "Requires Sensitivity Test",
+                "allergyWarning": "Allergy Warning",
+                "sensitivityTestFile": "Sensitivity Test File",
+                "concentration": "Concentration",
+                "safetyInstructions": "Safety Instructions",
+                "targetPests": "Target Pests",
+                "pest": "Pest",
+                "dilutionRate": "Dilution Rate"
+            },
+            "inventory": {
+                "title": "Inventory",
+                "placeholder": "Mix, consume, and check quantities.",
+                "tabs": {
+                    "readyStocks": "My Ready Stocks",
+                    "mix": "Mix",
+                    "quantityCheck": "Quantity Check",
+                    "rawStock": "Raw Stock"
+                },
+                "readyStocksTitle": "Ready Stocks",
+                "pesticide": "Pesticide",
+                "pest": "Pest",
+                "area": "Area",
+                "totalLitersAvailable": "Total Liters Available",
+                "rawQuantity": "Raw Quantity",
+                "litersUsed": "Liters Used",
+                "availableQuantity": "Available Quantity",
+                "mixTitle": "Mix Stock",
+                "quantityCheckTitle": "Check Quantity",
+                "rawStockTitle": "Raw Stock Quantity",
+                "consumeDialogTitle": "Consume Stock",
+                "mix": "Mix",
+                "consume": "Consume",
+                "check": "Check",
+                "validation": {
+                    "minQuantity": "Value must be greater than 0",
+                    "maxLiters": "Used liters cannot exceed available liters"
+                },
+                "messages": {
+                    "mixedSuccessfully": "Mixed successfully",
+                    "consumedSuccessfully": "Consumed successfully",
+                    "confirmConsume": "Are you sure you want to consume this stock?"
+                }
+            },
+            "regions": {
+                "title": "Regions Management",
+                "placeholder": "Manage regions.",
+                "name": "Region Name"
+            },
+            "areas": {
+                "title": "Areas Management",
+                "placeholder": "Manage areas and assign them to regions.",
+                "name": "Area Name",
+                "region": "Region",
+                "regionName": "Region",
+                "filterRegion": "Filter by Region"
             },
             "pests": {
                 "title": "Pests Management",
@@ -223,6 +289,9 @@
                 "type": "Type",
                 "parent": "Parent Pest",
                 "pesticidesCount": "Pesticides Count",
+                "pesticides": "Pesticides",
+                "noPesticides": "No pesticides assigned",
+                "children": "Children",
                 "severity": "Severity",
                 "image": "Image"
             },

@@ -10,6 +10,7 @@ import {
     PestDetails,
     PestListItem,
     PestLookupItem,
+    PestTypeLookupItem,
     PestUpdateRequest,
     UpdateDilutionRateRequest
 } from '../models/pest.model';
@@ -65,6 +66,10 @@ export class PestsService {
 
     getPestsLookup(): Observable<PestLookupItem[]> {
         return this.http.get<ApiResponse<PestLookupItem[]> | PestLookupItem[]>(`${this.apiUrl}/lookup`).pipe(map(unwrapApiResponse));
+    }
+
+    getPestTypes(): Observable<PestTypeLookupItem[]> {
+        return this.http.get<ApiResponse<PestTypeLookupItem[]> | PestTypeLookupItem[]>(`${this.apiUrl}/types`).pipe(map(unwrapApiResponse));
     }
 
     createPest(payload: PestCreateRequest): Observable<void> {

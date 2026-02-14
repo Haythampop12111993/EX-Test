@@ -2,3 +2,20 @@
     display: block;
 }
 
+:host ::ng-deep .pesticide-dialog .p-dialog-header {
+    border-bottom: 1px solid rgb(241 245 249);
+    padding: 1rem 1rem;
+}
+
+:host ::ng-deep .pesticide-dialog .p-dialog-content {
+    padding: 1rem;
+    background: transparent;
+}
+
+:host ::ng-deep .confirm-danger .p-dialog-header {
+    border-bottom: 1px solid rgb(241 245 249);
+}
+
+:host ::ng-deep .confirm-danger .p-dialog-content {
+    padding-top: 0.75rem;
+}

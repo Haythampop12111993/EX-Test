@@ -1,0 +1,206 @@
+<div class="p-6 space-y-4">
+    <p-toast></p-toast>
+    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+                <i class="pi pi-box text-xl"></i>
+            </div>
+            <div>
+                <div class="text-sm font-bold text-slate-800">{{ 'dashboard.controlPanel.inventory.title' | translate }}</div>
+                <div class="text-xs text-slate-500">{{ 'dashboard.controlPanel.inventory.placeholder' | translate }}</div>
+            </div>
+        </div>
+    </div>
+
+    <p-tabs value="ready">
+        <p-tablist>
+            <p-tab value="ready">{{ 'dashboard.controlPanel.inventory.tabs.readyStocks' | translate }}</p-tab>
+            <p-tab value="mix">{{ 'dashboard.controlPanel.inventory.tabs.mix' | translate }}</p-tab>
+            <p-tab value="check">{{ 'dashboard.controlPanel.inventory.tabs.quantityCheck' | translate }}</p-tab>
+            <p-tab value="raw">{{ 'dashboard.controlPanel.inventory.tabs.rawStock' | translate }}</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+            <p-tabpanel value="ready">
+                <div class="card bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 bg-white/50 backdrop-blur-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+                                <i class="pi pi-warehouse text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 tracking-tight">{{ 'dashboard.controlPanel.inventory.readyStocksTitle' | translate }}</h3>
+                                <p class="text-xs text-slate-500 font-medium">{{ readyStocks().length }} {{ 'common.records' | translate }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 w-full md:w-auto">
+                            <div class="relative w-full md:w-64 group">
+                                <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors z-10"></i>
+                                <input
+                                    pInputText
+                                    type="text"
+                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                    [placeholder]="'common.search' | translate"
+                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-slate-200 rounded-xl text-sm focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-table
+                        #dt
+                        [value]="readyStocks()"
+                        [loading]="readyStocksLoading()"
+                        [paginator]="true"
+                        [rows]="10"
+                        [rowsPerPageOptions]="[5,10,25,50,100]"
+                        [globalFilterFields]="['pesticideName', 'pestName', 'areaName']"
+                        styleClass="p-datatable-modern"
+                        responsiveLayout="scroll"
+                        [rowHover]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 first:pl-6">
+                                    {{ 'dashboard.controlPanel.inventory.pesticide' | translate }}
+                                </th>
+                                <th class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                                    {{ 'dashboard.controlPanel.inventory.pest' | translate }}
+                                </th>
+                                <th class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                                    {{ 'dashboard.controlPanel.inventory.area' | translate }}
+                                </th>
+                                <th class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                                    {{ 'dashboard.controlPanel.inventory.totalLitersAvailable' | translate }}
+                                </th>
+                                <th class="bg-slate-50/50 p-4 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 w-28 text-center sticky right-0 bg-white z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]">
+                                    {{ 'common.actions' | translate }}
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData>
+                            <tr class="group border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all duration-200">
+                                <td class="p-4 text-sm text-slate-600 font-medium first:pl-6">{{ rowData.pesticideName }}</td>
+                                <td class="p-4 text-sm text-slate-600 font-medium">{{ rowData.pestName }}</td>
+                                <td class="p-4 text-sm text-slate-600 font-medium">{{ rowData.areaName }}</td>
+                                <td class="p-4 text-sm text-slate-600 font-medium">{{ rowData.totalLitersAvailable }}</td>
+                                <td class="p-4 text-center sticky right-0 bg-white group-hover:bg-slate-50/50 z-10 shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]">
+                                    <div class="flex items-center justify-center">
+                                        <button
+                                            pButton
+                                            icon="pi pi-minus"
+                                            *appHasPermission="AppPermissions.Inventory.Consume"
+                                            (click)="openConsumeDialog(rowData)"
+                                            class="p-button-text p-button-rounded p-button-sm w-8 h-8 text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors">
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5" class="text-center p-8">
+                                    <div class="flex flex-col items-center justify-center text-slate-400">
+                                        <i class="pi pi-inbox text-4xl mb-3"></i>
+                                        <p class="text-sm font-medium">{{ 'common.noData' | translate }}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <p-dialog
+                    [(visible)]="displayConsumeDialog"
+                    [style]="{ width: '450px' }"
+                    [modal]="true"
+                    [draggable]="false"
+                    [resizable]="false"
+                    [header]="'dashboard.controlPanel.inventory.consumeDialogTitle' | translate"
+                    styleClass="p-fluid">
+                    <ng-template pTemplate="content">
+                        <div class="mb-4 text-sm text-slate-600">
+                            @if (selectedReadyStock()) {
+                                <div class="font-semibold text-slate-800">{{ selectedReadyStock()!.pesticideName }} - {{ selectedReadyStock()!.pestName }}</div>
+                                <div class="text-xs text-slate-500">
+                                    {{ 'dashboard.controlPanel.inventory.totalLitersAvailable' | translate }}: {{ selectedReadyStock()!.totalLitersAvailable }}
+                                </div>
+                            }
+                        </div>
+                        <app-dynamic-form
+                            [config]="consumeFormConfig()"
+                            [initialData]="{}"
+                            [submitLabel]="'dashboard.controlPanel.inventory.consume'"
+                            [cancelLabel]="'common.cancel'"
+                            [loading]="consumeSaving()"
+                            (formSubmit)="submitConsume($event)"
+                            (formCancel)="hideConsumeDialog()">
+                        </app-dynamic-form>
+                    </ng-template>
+                </p-dialog>
+            </p-tabpanel>
+
+            <p-tabpanel value="mix">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                    <h3 class="text-lg font-bold text-slate-800 tracking-tight mb-4">{{ 'dashboard.controlPanel.inventory.mixTitle' | translate }}</h3>
+                    <app-dynamic-form
+                        *appHasPermission="AppPermissions.Inventory.Mix"
+                        [config]="mixFormConfig()"
+                        [initialData]="{}"
+                        [submitLabel]="'dashboard.controlPanel.inventory.mix'"
+                        [cancelLabel]="'common.cancel'"
+                        [loading]="mixSaving()"
+                        (formSubmit)="submitMix($event)">
+                    </app-dynamic-form>
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="check">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 tracking-tight">{{ 'dashboard.controlPanel.inventory.quantityCheckTitle' | translate }}</h3>
+                    <app-dynamic-form
+                        *appHasPermission="AppPermissions.Inventory.Check"
+                        [config]="quantityCheckFormConfig()"
+                        [initialData]="{}"
+                        [submitLabel]="'dashboard.controlPanel.inventory.check'"
+                        [cancelLabel]="'common.cancel'"
+                        [loading]="quantityCheckLoading()"
+                        (formSubmit)="submitQuantityCheck($event)"
+                        (formCancel)="onQuantityCheckCancel()">
+                    </app-dynamic-form>
+
+                    @if (quantityCheckResult() !== null) {
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700">
+                            {{ 'dashboard.controlPanel.inventory.availableQuantity' | translate }}: <span class="font-bold">{{ quantityCheckResult() }}</span>
+                        </div>
+                    }
+                </div>
+            </p-tabpanel>
+
+            <p-tabpanel value="raw">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 tracking-tight">{{ 'dashboard.controlPanel.inventory.rawStockTitle' | translate }}</h3>
+                    <app-dynamic-form
+                        *appHasPermission="AppPermissions.Inventory.Check"
+                        [config]="rawStockFormConfig()"
+                        [initialData]="{}"
+                        [submitLabel]="'dashboard.controlPanel.inventory.check'"
+                        [cancelLabel]="'common.cancel'"
+                        [loading]="rawStockLoading()"
+                        (formSubmit)="submitRawStock($event)"
+                        (formCancel)="onRawStockCancel()">
+                    </app-dynamic-form>
+
+                    @if (rawStockResult() !== null) {
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700">
+                            {{ 'dashboard.controlPanel.inventory.availableQuantity' | translate }}: <span class="font-bold">{{ rawStockResult() }}</span>
+                        </div>
+                    }
+                </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>

@@ -43,6 +43,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() submitLabel = 'save';
   @Input() cancelLabel = 'cancel';
   @Input() loading = false;
+  @Input() showActions = true;
   
   @Output() formSubmit = new EventEmitter<Record<string, unknown>>();
   @Output() formCancel = new EventEmitter<void>();
@@ -158,5 +159,10 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   isString(value: unknown): boolean {
     return typeof value === 'string';
+  }
+
+  isImageUrl(url: string): boolean {
+    const clean = url.trim().toLowerCase();
+    return clean.endsWith('.png') || clean.endsWith('.jpg') || clean.endsWith('.jpeg') || clean.endsWith('.webp') || clean.endsWith('.gif');
   }
 }

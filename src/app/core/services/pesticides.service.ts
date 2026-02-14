@@ -44,6 +44,10 @@ export class PesticidesService {
             );
     }
 
+    getPesticideById(id: EntityId): Observable<PesticideListItem> {
+        return this.http.get<ApiResponse<PesticideListItem> | PesticideListItem>(`${this.apiUrl}/${id}`).pipe(map(unwrapApiResponse));
+    }
+
     createPesticide(payload: FormData | PesticideUpsertFormValue): Observable<void> {
         const body = payload instanceof FormData ? payload : this.toFormData(payload);
         return this.http.post<ApiResponse<unknown> | unknown>(this.apiUrl, body).pipe(map(() => undefined));
@@ -78,13 +82,29 @@ export class PesticidesService {
     private toFormData(value: PesticideUpsertFormValue): FormData {
         const formData = new FormData();
 
-        Object.entries(value).forEach(([key, v]) => {
+        const appendValue = (key: string, v: unknown) => {
             if (v === undefined || v === null) return;
+            if (Array.isArray(v)) {
+                v.forEach((item, idx) => {
+                    if (item && typeof item === 'object' && !(item instanceof Blob)) {
+                        Object.entries(item).forEach(([innerKey, innerValue]) => {
+                            appendValue(`${key}[${idx}].${innerKey}`, innerValue);
+                        });
+                        return;
+                    }
+                    appendValue(`${key}[${idx}]`, item);
+                });
+                return;
+            }
+
             if (typeof v === 'string') formData.append(key, v);
             else if (typeof v === 'number') formData.append(key, String(v));
             else if (typeof v === 'boolean') formData.append(key, v ? 'true' : 'false');
-            else formData.append(key, v);
-        });
+            else if (v instanceof Blob) formData.append(key, v);
+            else formData.append(key, String(v));
+        };
+
+        Object.entries(value).forEach(([key, v]) => appendValue(key, v));
 
         return formData;
     }

@@ -63,6 +63,13 @@ export const AppPermissions = {
     Edit: 'Permissions.Area.Edit',
     Delete: 'Permissions.Area.Delete',
   },
+
+  Inventory: {
+    View: 'Permissions.Inventory.View',
+    Mix: 'Permissions.Inventory.Mix',
+    Consume: 'Permissions.Inventory.Consume',
+    Check: 'Permissions.Inventory.Check',
+  },
 } as const;
 
 // Type helper to extract all permission values
