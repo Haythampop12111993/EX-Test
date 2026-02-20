@@ -1,19 +1,19 @@
 <div class="flex flex-col gap-8">
-    
+
     <!-- KPI Stats Row -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        @for (stat of stats; track stat.label) {
+        @for (stat of stats(); track stat.label) {
             <div class="card-glass p-6 relative group overflow-hidden transition-all duration-300 hover:-translate-y-1">
                 <!-- Background decoration -->
                 <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 transition-transform group-hover:scale-110"
                      [ngClass]="stat.bgClass"></div>
-                
+
                 <div class="flex justify-between items-start z-10 relative">
                     <div>
                         <span class="text-slate-500 text-sm font-medium">{{ stat.label | translate }}</span>
                         <h4 class="text-2xl font-bold text-slate-800 mt-2 tracking-tight">{{ stat.value }}</h4>
                         <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs font-bold px-2 py-0.5 rounded-full" 
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full"
                                   [ngClass]="stat.trendUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'">
                                 <i class="pi" [ngClass]="stat.trendUp ? 'pi-arrow-up' : 'pi-arrow-down'" style="font-size: 0.6rem"></i>
                                 {{ stat.trend }}
@@ -82,6 +82,47 @@
                 <span class="text-slate-400 font-medium">{{ 'dashboard.charts.loading' | translate }}</span>
             </div>
         </div>
+        }
+    </div>
+
+    <div class="card-glass p-8">
+        <div class="w-full flex justify-between items-center mb-6">
+            <div>
+                <h3 class="text-lg font-bold text-slate-800">Weather Forecast</h3>
+                <p class="text-xs text-slate-500 mt-1">/WeatherForecast</p>
+            </div>
+            <button pButton icon="pi pi-refresh" class="p-button-text p-button-rounded text-slate-400 hover:text-brand-600">
+                <span class="sr-only">Refresh</span>
+            </button>
+        </div>
+
+        @if (weatherForecasts(); as forecasts) {
+            @if (forecasts.length) {
+                <div class="overflow-auto">
+                    <table class="min-w-full text-sm text-slate-700">
+                        <thead>
+                            <tr class="border-b border-slate-200">
+                                <th class="py-2 text-right font-semibold">Date</th>
+                                <th class="py-2 text-right font-semibold">°C</th>
+                                <th class="py-2 text-right font-semibold">°F</th>
+                                <th class="py-2 text-right font-semibold">Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of forecasts; track item.date) {
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-2 text-right">{{ item.date }}</td>
+                                    <td class="py-2 text-right">{{ item.temperatureC }}</td>
+                                    <td class="py-2 text-right">{{ item.temperatureF }}</td>
+                                    <td class="py-2 text-right">{{ item.summary ?? '-' }}</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            } @else {
+                <div class="text-sm text-slate-500">No data</div>
+            }
         }
     </div>
 </div>

@@ -1,0 +1,237 @@
+<div class="p-6 space-y-4">
+  @if (loadError(); as err) {
+    <div class="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-start gap-3">
+        <div class="w-9 h-9 rounded-xl bg-red-100 text-red-700 flex items-center justify-center shrink-0">
+          <i class="pi pi-exclamation-circle"></i>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-red-800">{{ 'common.error' | translate }}</div>
+          <div class="text-sm text-red-700">{{ err }}</div>
+        </div>
+      </div>
+      <button pButton type="button" severity="secondary" icon="pi pi-refresh" (click)="reload()">
+        <span>{{ 'common.tryAgain' | translate }}</span>
+      </button>
+    </div>
+  }
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+          <i class="pi pi-compass text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-slate-800">{{ 'dashboard.controlPanel.scoutingOps.title' | translate }}</h1>
+          <p class="text-xs text-slate-500">{{ 'dashboard.addScouting.desc' | translate }}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a pButton routerLink="/operations/scouting" icon="pi pi-plus">
+          <span>{{ 'dashboard.controlPanel.scoutingOps.actions.newReport' | translate }}</span>
+        </a>
+        <button pButton type="button" severity="secondary" icon="pi pi-refresh" (click)="reload()">
+          <span>{{ 'common.refresh' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-end">
+      <div class="lg:col-span-5 flex flex-col gap-1">
+        <span class="text-xs font-medium text-slate-600">{{ 'common.search' | translate }}</span>
+        <div class="relative">
+          <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input
+            pInputText
+            class="w-full pl-9"
+            [(ngModel)]="search"
+            [placeholder]="'dashboard.controlPanel.scoutingOps.filters.searchPlaceholder' | translate"
+            (keydown.enter)="reload()"
+          />
+        </div>
+        <small class="text-slate-500">{{ 'dashboard.controlPanel.scoutingOps.filters.searchHelp' | translate }}</small>
+      </div>
+
+      <div class="lg:col-span-3 flex flex-col gap-1">
+        <span class="text-xs font-medium text-slate-600">{{ 'common.status' | translate }}</span>
+        <p-select
+          [options]="statusOptions()"
+          [(ngModel)]="status"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'common.all' | translate"
+          (onChange)="reload()"
+          styleClass="w-full"
+        />
+        <small class="text-slate-500">{{ 'dashboard.controlPanel.scoutingOps.filters.statusHelp' | translate }}</small>
+      </div>
+
+      <div class="lg:col-span-3 flex flex-col gap-1">
+        <span class="text-xs font-medium text-slate-600">{{ 'dashboard.table.headers.date' | translate }}</span>
+        <div class="grid grid-cols-2 gap-2">
+          <p-datepicker
+            [(ngModel)]="startDate"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            (onSelect)="reload()"
+            [placeholder]="'common.fromDate' | translate"
+            styleClass="w-full"
+          />
+          <p-datepicker
+            [(ngModel)]="endDate"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            (onSelect)="reload()"
+            [placeholder]="'common.toDate' | translate"
+            styleClass="w-full"
+          />
+        </div>
+        <small class="text-slate-500">{{ 'dashboard.controlPanel.scoutingOps.filters.dateHelp' | translate }}</small>
+      </div>
+
+      <div class="lg:col-span-1 flex justify-end">
+        <button pButton type="button" severity="secondary" icon="pi pi-filter-slash" (click)="resetFilters()" [disabled]="!hasActiveFilters()">
+          <span class="sr-only">{{ 'common.clearFilters' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="px-4 py-3 border-b border-slate-100 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-2 text-sm text-slate-600">
+        <span class="font-semibold text-slate-800">{{ (ops()?.count || 0) }}</span>
+        <span>{{ 'common.records' | translate }}</span>
+        @if (hasActiveFilters()) {
+          <span class="text-slate-400">•</span>
+          <span class="text-slate-500">{{ 'common.filtered' | translate }}</span>
+        }
+      </div>
+    </div>
+
+    <p-table
+      [value]="ops()?.data || []"
+      [loading]="isLoading()"
+      [paginator]="true"
+      [rows]="10"
+      [totalRecords]="ops()?.count || 0"
+      [lazy]="true"
+      (onLazyLoad)="loadData($event)"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      styleClass="p-datatable-modern p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-xs uppercase text-slate-500 bg-slate-50 p-4">{{ 'dashboard.table.headers.code' | translate }}</th>
+          <th class="text-xs uppercase text-slate-500 bg-slate-50 p-4">{{ 'dashboard.table.headers.area' | translate }}</th>
+          <th class="text-xs uppercase text-slate-500 bg-slate-50 p-4">{{ 'dashboard.table.headers.date' | translate }}</th>
+          <th class="text-xs uppercase text-slate-500 bg-slate-50 p-4">{{ 'dashboard.table.headers.technician' | translate }}</th>
+          <th class="text-xs uppercase text-slate-500 bg-slate-50 p-4">{{ 'dashboard.table.headers.status' | translate }}</th>
+          <th class="text-xs uppercase text-slate-500 bg-slate-50 p-4 text-right">{{ 'common.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-op>
+        <tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors">
+          <td class="p-4 font-mono text-xs text-slate-600">{{ op.code }}</td>
+          <td class="p-4">
+            <div class="font-semibold text-slate-800 leading-5">{{ op.areaName || op.regionName || '-' }}</div>
+            <div class="text-xs text-slate-500 mt-1">{{ op.regionName || '-' }}</div>
+          </td>
+          <td class="p-4 text-sm text-slate-600">{{ op.reportDate | date:'shortDate' }}</td>
+          <td class="p-4 text-sm text-slate-600">{{ op.scoutUserName || '-' }}</td>
+          <td class="p-4">
+            <span
+              class="px-2 py-1 rounded-full text-xs font-semibold"
+              [ngClass]="{
+                'bg-emerald-100 text-emerald-700': op.status === 'Completed',
+                'bg-amber-100 text-amber-700': op.status === 'Pending',
+                'bg-blue-100 text-blue-700': op.status === 'In_Progress',
+                'bg-red-100 text-red-700': op.status === 'Cancelled'
+              }"
+            >
+              {{ statusLabel(op.status) }}
+            </span>
+          </td>
+          <td class="p-4 text-right">
+            <div class="inline-flex gap-2">
+              <button pButton type="button" size="small" severity="secondary" icon="pi pi-eye" (click)="openDetails(op)">
+                <span class="sr-only">{{ 'common.view' | translate }}</span>
+              </button>
+              <a pButton size="small" icon="pi pi-plus" routerLink="/operations/scouting">
+                <span class="sr-only">{{ 'dashboard.controlPanel.scoutingOps.actions.newReport' | translate }}</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="p-10 text-center">
+            <div class="max-w-sm mx-auto flex flex-col items-center gap-2">
+              <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center">
+                <i class="pi pi-inbox text-xl"></i>
+              </div>
+              <div class="text-sm font-semibold text-slate-800">{{ 'common.noData' | translate }}</div>
+              <div class="text-sm text-slate-500">{{ 'dashboard.controlPanel.scoutingOps.empty.desc' | translate }}</div>
+              <div class="flex items-center gap-2 mt-2">
+                @if (hasActiveFilters()) {
+                  <button pButton type="button" severity="secondary" icon="pi pi-filter-slash" (click)="resetFilters()">
+                    <span>{{ 'common.clearFilters' | translate }}</span>
+                  </button>
+                }
+                <a pButton icon="pi pi-plus" routerLink="/operations/scouting">
+                  <span>{{ 'dashboard.controlPanel.scoutingOps.actions.newReport' | translate }}</span>
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog
+    [(visible)]="detailsVisible"
+    [modal]="true"
+    [dismissableMask]="true"
+    [style]="{ width: 'min(720px, 92vw)' }"
+    [header]="'dashboard.controlPanel.scoutingOps.detailsTitle' | translate"
+  >
+    @if (detailsLoading()) {
+      <div class="py-6 text-center text-slate-500">
+        {{ 'dashboard.charts.loading' | translate }}
+      </div>
+    } @else if (detailsError(); as derr) {
+      <div class="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {{ derr }}
+      </div>
+    } @else if (selectedDetails(); as d) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
+          <div class="text-xs text-slate-500">{{ 'dashboard.table.headers.code' | translate }}</div>
+          <div class="font-mono text-sm text-slate-800 mt-1">{{ d.code }}</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
+          <div class="text-xs text-slate-500">{{ 'dashboard.table.headers.site' | translate }}</div>
+          <div class="text-sm text-slate-800 mt-1">{{ d.areaName || d.regionName || '-' }}</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
+          <div class="text-xs text-slate-500">{{ 'dashboard.table.headers.date' | translate }}</div>
+          <div class="text-sm text-slate-800 mt-1">{{ d.reportDate | date:'medium' }}</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
+          <div class="text-xs text-slate-500">{{ 'dashboard.table.headers.technician' | translate }}</div>
+          <div class="text-sm text-slate-800 mt-1">{{ d.scoutUserName || '-' }}</div>
+        </div>
+        <div class="md:col-span-2 bg-slate-50 rounded-lg p-4 border border-slate-100">
+          <div class="text-xs text-slate-500">{{ 'dashboard.controlPanel.scoutingOps.details.notes' | translate }}</div>
+          <div class="text-sm text-slate-800 mt-1">{{ d.notes || '-' }}</div>
+        </div>
+      </div>
+    }
+  </p-dialog>
+</div>

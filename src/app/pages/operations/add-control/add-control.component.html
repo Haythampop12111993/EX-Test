@@ -1,6 +1,152 @@
-<div class="p-6">
-    <h1 class="text-2xl font-bold text-slate-800 mb-4">إضافة عملية مكافحة</h1>
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <p class="text-slate-600">صفحة إضافة عملية مكافحة جديدة.</p>
+<div class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
+  <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+
+    <div class="bg-white border-b border-slate-100 p-6 flex items-center justify-between sticky top-0 z-10">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">{{ 'dashboard.addControl.title' | translate }}</h1>
+        <p class="text-slate-500 text-sm">{{ 'dashboard.addControl.desc' | translate }}</p>
+      </div>
+      <button pButton icon="pi pi-times" type="button" [routerLink]="['/control-panel/control-ops']" severity="secondary" [text]="true" [rounded]="true">
+        <span class="sr-only">{{ 'common.cancel' | translate }}</span>
+      </button>
     </div>
+
+    @if (loadError(); as err) {
+      <div class="p-6">
+        <div class="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-xl bg-red-100 text-red-700 flex items-center justify-center shrink-0">
+              <i class="pi pi-exclamation-circle"></i>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-red-800">{{ 'common.error' | translate }}</div>
+              <div class="text-sm text-red-700">{{ err }}</div>
+            </div>
+          </div>
+          @if (scoutingId) {
+            <button pButton type="button" severity="secondary" icon="pi pi-refresh" (click)="loadData(scoutingId)">
+              <span>{{ 'common.tryAgain' | translate }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="p-8 text-center text-slate-500">
+        <i class="pi pi-spin pi-spinner text-2xl mb-2"></i>
+        <p>{{ 'dashboard.charts.loading' | translate }}</p>
+      </div>
+    } @else if (!scoutingReport()) {
+      <div class="p-8 text-center">
+        <div class="bg-amber-50 text-amber-800 p-4 rounded-2xl border border-amber-100 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3">
+            <i class="pi pi-exclamation-triangle text-xl"></i>
+          </div>
+          <p class="font-semibold">{{ 'dashboard.addControl.noReport.title' | translate }}</p>
+          <p class="text-sm text-amber-700 mt-1">{{ 'dashboard.addControl.noReport.desc' | translate }}</p>
+        </div>
+        <button pButton type="button" routerLink="/control-panel/control-ops" severity="secondary" icon="pi pi-arrow-left">
+          <span>{{ 'dashboard.addControl.noReport.back' | translate }}</span>
+        </button>
+      </div>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-8">
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <h3 class="text-sm font-bold text-slate-700 uppercase mb-2">{{ 'dashboard.controlPanel.scoutingOps.title' | translate }}</h3>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span class="text-slate-500 block">{{ 'dashboard.table.headers.code' | translate }}</span>
+              <span class="font-mono font-medium">{{ scoutingReport()?.code }}</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">{{ 'dashboard.table.headers.site' | translate }}</span>
+              <span class="font-medium">{{ scoutingReport()?.areaName || scoutingReport()?.regionName }}</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">{{ 'dashboard.table.headers.date' | translate }}</span>
+              <span>{{ scoutingReport()?.reportDate | date:'medium' }}</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">{{ 'dashboard.controlPanel.pests.title' | translate }}</span>
+              <span>{{ scoutingReport()?.pests?.length || 0 }} {{ 'dashboard.addControl.summary.pests' | translate }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex flex-col gap-2">
+            <label for="readyStockId" class="text-sm font-medium text-slate-700">
+              {{ 'dashboard.addControl.form.readyStock' | translate }} <span class="text-red-500">*</span>
+            </label>
+            <p-select [options]="readyStocks()" inputId="readyStockId" formControlName="readyStockId" optionLabel="pesticideName" optionValue="id" [filter]="true" [placeholder]="'dashboard.addControl.form.readyStockPlaceholder' | translate" styleClass="w-full">
+              <ng-template let-item pTemplate="item">
+                <div class="flex justify-between items-center w-full">
+                  <span>{{ item.pesticideName }} ({{ item.pestName }})</span>
+                  <span class="text-xs bg-slate-100 px-2 py-1 rounded">{{ item.totalLitersAvailable }} L</span>
+                </div>
+              </ng-template>
+            </p-select>
+            @if (readyStocks().length === 0) {
+              <small class="text-slate-500">{{ 'dashboard.addControl.form.noReadyStock' | translate }}</small>
+            }
+            @if (form.get('readyStockId')?.invalid && form.get('readyStockId')?.touched) {
+              <small class="text-red-500">{{ 'common.required' | translate }}</small>
+            }
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="litersUsed" class="text-sm font-medium text-slate-700">
+              {{ 'dashboard.addControl.form.litersUsed' | translate }} <span class="text-red-500">*</span>
+            </label>
+            <p-inputNumber inputId="litersUsed" formControlName="litersUsed" mode="decimal" [minFractionDigits]="1" [maxFractionDigits]="2" [min]="0.1" styleClass="w-full"></p-inputNumber>
+            <small class="text-slate-500">{{ 'dashboard.addControl.form.litersUsedHelp' | translate }}</small>
+            @if (form.get('litersUsed')?.invalid && form.get('litersUsed')?.touched) {
+              <small class="text-red-500">{{ 'dashboard.addControl.validation.litersUsed' | translate }}</small>
+            }
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="applicationMethod" class="text-sm font-medium text-slate-700">{{ 'dashboard.addControl.form.applicationMethod' | translate }}</label>
+            <input id="applicationMethod" pInputText formControlName="applicationMethod" class="w-full" [placeholder]="'dashboard.addControl.form.applicationMethodPlaceholder' | translate" />
+            <small class="text-slate-500">{{ 'dashboard.addControl.form.applicationMethodHelp' | translate }}</small>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label for="nextFollowUpDate" class="text-sm font-medium text-slate-700">{{ 'dashboard.addControl.form.nextFollowUpDate' | translate }}</label>
+              <p-datepicker inputId="nextFollowUpDate" formControlName="nextFollowUpDate" [showIcon]="true" dateFormat="yy-mm-dd" styleClass="w-full"></p-datepicker>
+              <small class="text-slate-500">{{ 'dashboard.addControl.form.nextFollowUpDateHelp' | translate }}</small>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="evaluationDate" class="text-sm font-medium text-slate-700">{{ 'dashboard.addControl.form.evaluationDate' | translate }}</label>
+              <p-datepicker inputId="evaluationDate" formControlName="evaluationDate" [showIcon]="true" dateFormat="yy-mm-dd" styleClass="w-full"></p-datepicker>
+              <small class="text-slate-500">{{ 'dashboard.addControl.form.evaluationDateHelp' | translate }}</small>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p-checkbox formControlName="needsAnotherControl" [binary]="true" inputId="needsAnotherControl"></p-checkbox>
+            <label for="needsAnotherControl" class="text-sm font-medium text-slate-700">{{ 'dashboard.addControl.form.needsAnotherControl' | translate }}</label>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="notes" class="text-sm font-medium text-slate-700">{{ 'common.notes' | translate }}</label>
+            <textarea id="notes" pTextarea formControlName="notes" rows="3" class="w-full"></textarea>
+            <small class="text-slate-500">{{ 'dashboard.addControl.form.notesHelp' | translate }}</small>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4">
+          <button pButton type="button" severity="secondary" [routerLink]="['/control-panel/control-ops']">
+            <span>{{ 'common.cancel' | translate }}</span>
+          </button>
+          <button pButton type="submit" [loading]="submitting()" [disabled]="form.invalid">
+            <span>{{ 'common.save' | translate }}</span>
+          </button>
+        </div>
+      </form>
+    }
+  </div>
 </div>

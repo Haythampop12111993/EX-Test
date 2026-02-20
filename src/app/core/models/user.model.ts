@@ -25,6 +25,7 @@ export interface UpdateUserRequest {
     fullName: string;
     phoneNumber: string;
     email: string;
+    nationalId: string;
     assignedAreaId: number;
     roles: string[];
 }

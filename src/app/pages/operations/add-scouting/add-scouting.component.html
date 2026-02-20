@@ -1,6 +1,256 @@
-<div class="p-6">
-    <h1 class="text-2xl font-bold text-slate-800 mb-4">إضافة عملية استكشاف</h1>
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <p class="text-slate-600">صفحة إضافة استكشاف جديد.</p>
+<div class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
+  <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white border-b border-slate-100 p-6 flex items-center justify-between sticky top-0 z-10">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">{{ 'dashboard.addScouting.title' | translate }}</h1>
+        <p class="text-slate-500 text-sm">{{ 'dashboard.addScouting.desc' | translate }}</p>
+      </div>
+      <button pButton icon="pi pi-times" type="button" [routerLink]="['/control-panel/scouting-ops']" severity="secondary" [text]="true" [rounded]="true">
+        <span class="sr-only">{{ 'common.cancel' | translate }}</span>
+      </button>
     </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-8">
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
+          <i class="pi pi-map-marker text-emerald-500"></i>
+          {{ 'dashboard.table.headers.site' | translate }}
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="Latitude" class="text-sm font-medium text-slate-700">{{ 'common.latitude' | translate }}</label>
+            <p-inputNumber inputId="Latitude" formControlName="Latitude" mode="decimal" [minFractionDigits]="6" [maxFractionDigits]="8" styleClass="w-full"></p-inputNumber>
+            <small class="text-slate-500">{{ 'dashboard.addScouting.form.latitudeHelp' | translate }}</small>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="Longitude" class="text-sm font-medium text-slate-700">{{ 'common.longitude' | translate }}</label>
+            <p-inputNumber inputId="Longitude" formControlName="Longitude" mode="decimal" [minFractionDigits]="6" [maxFractionDigits]="8" styleClass="w-full"></p-inputNumber>
+            <small class="text-slate-500">{{ 'dashboard.addScouting.form.longitudeHelp' | translate }}</small>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="AddressDetails" class="text-sm font-medium text-slate-700">{{ 'common.address' | translate }} <span class="text-red-500">*</span></label>
+          <textarea id="AddressDetails" pTextarea formControlName="AddressDetails" rows="3" class="w-full" [placeholder]="'common.addressPlaceholder' | translate"></textarea>
+          <small class="text-slate-500">{{ 'dashboard.addScouting.form.addressHelp' | translate }}</small>
+          @if (form.get('AddressDetails')?.invalid && form.get('AddressDetails')?.touched) {
+            <small class="text-red-500">
+              {{ 'common.required' | translate }}
+            </small>
+          }
+        </div>
+
+        <button type="button" pButton icon="pi pi-map" severity="help" size="small" (click)="getCurrentLocation()" [loading]="locationLoading()">
+          <span>{{ 'dashboard.addScouting.location.cta' | translate }}</span>
+        </button>
+      </div>
+
+      <div class="h-px bg-slate-100"></div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
+          <i class="pi pi-file-edit text-emerald-500"></i>
+          {{ 'dashboard.addScouting.report.title' | translate }}
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="Source" class="text-sm font-medium text-slate-700">{{ 'dashboard.addScouting.form.source' | translate }} <span class="text-red-500">*</span></label>
+            <p-select inputId="Source" formControlName="Source" [options]="sourceOptions()" optionLabel="label" optionValue="value" styleClass="w-full"></p-select>
+            <small class="text-slate-500">{{ 'dashboard.addScouting.form.sourceHelp' | translate }}</small>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="InfestationLevel" class="text-sm font-medium text-slate-700">{{ 'dashboard.addScouting.form.infestationLevel' | translate }} <span class="text-red-500">*</span></label>
+            <p-select inputId="InfestationLevel" formControlName="InfestationLevel" [options]="infestationLevelOptions()" optionLabel="label" optionValue="value" styleClass="w-full"></p-select>
+            <small class="text-slate-500">{{ 'dashboard.addScouting.form.infestationLevelHelp' | translate }}</small>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="Priority" class="text-sm font-medium text-slate-700">{{ 'dashboard.addScouting.form.priority' | translate }} <span class="text-red-500">*</span></label>
+            <p-select inputId="Priority" formControlName="Priority" [options]="priorityOptions()" optionLabel="label" optionValue="value" styleClass="w-full"></p-select>
+            <small class="text-slate-500">{{ 'dashboard.addScouting.form.priorityHelp' | translate }}</small>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="PriorityReason" class="text-sm font-medium text-slate-700">{{ 'dashboard.addScouting.form.priorityReason' | translate }} <span class="text-red-500">*</span></label>
+            <input id="PriorityReason" pInputText formControlName="PriorityReason" class="w-full" [placeholder]="'dashboard.addScouting.form.priorityReasonPlaceholder' | translate" />
+            <small class="text-slate-500">{{ 'dashboard.addScouting.form.priorityReasonHelp' | translate }}</small>
+            @if (form.get('PriorityReason')?.invalid && form.get('PriorityReason')?.touched) {
+              <small class="text-red-500">{{ 'common.required' | translate }}</small>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="Notes" class="text-sm font-medium text-slate-700">{{ 'dashboard.addScouting.form.notes' | translate }} <span class="text-red-500">*</span></label>
+          <textarea id="Notes" pTextarea formControlName="Notes" rows="3" class="w-full" [placeholder]="'dashboard.addScouting.form.notesPlaceholder' | translate"></textarea>
+          <small class="text-slate-500">{{ 'dashboard.addScouting.form.notesHelp' | translate }}</small>
+          @if (form.get('Notes')?.invalid && form.get('Notes')?.touched) {
+            <small class="text-red-500">{{ 'common.required' | translate }}</small>
+          }
+        </div>
+      </div>
+
+      <div class="h-px bg-slate-100"></div>
+
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
+            <i class="pi pi-bug text-emerald-500"></i>
+            {{ 'dashboard.controlPanel.pests.title' | translate }}
+          </h3>
+          <button type="button" pButton icon="pi pi-plus" size="small" (click)="addPest()">
+            <span>{{ 'common.add' | translate }}</span>
+          </button>
+        </div>
+
+        @if (pestsLoading()) {
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 flex items-center gap-2">
+            <i class="pi pi-spin pi-spinner"></i>
+            <span>{{ 'dashboard.addScouting.pests.loading' | translate }}</span>
+          </div>
+        } @else if (pestsLoadError(); as perr) {
+          <div class="rounded-xl border border-red-100 bg-red-50 p-4 text-sm text-red-700 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span>{{ perr }}</span>
+            <button pButton type="button" severity="secondary" size="small" icon="pi pi-refresh" (click)="loadPests()">
+              <span>{{ 'common.tryAgain' | translate }}</span>
+            </button>
+          </div>
+        }
+
+        <div formArrayName="Pests" class="space-y-4">
+          @for (pest of pestsArray.controls; track $index; let i = $index) {
+            <div [formGroupName]="i" class="bg-slate-50 p-4 rounded-xl border border-slate-200 relative group animate-fade-in">
+              <button type="button" pButton icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
+                      class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      (click)="removePest(i)">
+                <span class="sr-only">{{ 'common.delete' | translate }}</span>
+              </button>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                  <label [for]="'pestId-' + i" class="text-sm font-medium text-slate-700">{{ 'dashboard.controlPanel.pests.name' | translate }} <span class="text-red-500">*</span></label>
+                  <p-select [options]="pestOptions()" [inputId]="'pestId-' + i" formControlName="pestId" optionLabel="name" optionValue="id" [filter]="true" [placeholder]="'common.select' | translate" styleClass="w-full"></p-select>
+                  <small class="text-slate-500">{{ 'dashboard.addScouting.pests.pestHelp' | translate }}</small>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label [for]="'severity-' + i" class="text-sm font-medium text-slate-700">{{ 'dashboard.controlPanel.pests.severity' | translate }} <span class="text-red-500">*</span></label>
+                  <p-select [options]="severityOptions()" [inputId]="'severity-' + i" formControlName="severity" optionLabel="label" optionValue="value" [placeholder]="'common.select' | translate" styleClass="w-full"></p-select>
+                  <small class="text-slate-500">{{ 'dashboard.addScouting.pests.severityHelp' | translate }}</small>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label [for]="'affectedAreaPercentage-' + i" class="text-sm font-medium text-slate-700">{{ 'dashboard.controlPanel.scoutingOps.affectedArea' | translate }} (%) <span class="text-red-500">*</span></label>
+                  <p-inputNumber [inputId]="'affectedAreaPercentage-' + i" formControlName="affectedAreaPercentage" suffix="%" [min]="0" [max]="100" styleClass="w-full"></p-inputNumber>
+                  <small class="text-slate-500">{{ 'dashboard.addScouting.pests.affectedAreaHelp' | translate }}</small>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label [for]="'localNotes-' + i" class="text-sm font-medium text-slate-700">{{ 'common.notes' | translate }}</label>
+                  <input [id]="'localNotes-' + i" pInputText formControlName="localNotes" class="w-full" />
+                  <small class="text-slate-500">{{ 'dashboard.addScouting.pests.notesHelp' | translate }}</small>
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (pestsArray.length === 0) {
+            <div class="text-center py-8 text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+              {{ 'dashboard.controlPanel.scoutingOps.noPestsAdded' | translate }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="h-px bg-slate-100"></div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
+          <i class="pi pi-camera text-emerald-500"></i>
+          {{ 'dashboard.controlPanel.pests.image' | translate }}
+        </h3>
+        <p class="text-sm text-slate-500">{{ 'dashboard.addScouting.images.help' | translate }}</p>
+
+        <p-fileUpload
+          mode="advanced"
+          [multiple]="true"
+          accept="image/*"
+          [maxFileSize]="5000000"
+          [customUpload]="true"
+          (uploadHandler)="onUpload($event)"
+          [auto]="true"
+          [chooseLabel]="'common.choose' | translate"
+          [cancelLabel]="'common.cancel' | translate">
+        </p-fileUpload>
+
+        @if (uploadedFiles().length > 0) {
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+            @for (item of uploadedFiles(); track $index; let i = $index) {
+              <div class="relative rounded-xl border border-slate-200 bg-white overflow-hidden">
+                <img [src]="item.url" [alt]="item.file.name" class="w-full h-28 object-cover" loading="lazy" />
+                <div class="px-3 py-2 flex items-center justify-between gap-2">
+                  <span class="text-xs text-slate-600 truncate">{{ item.file.name }}</span>
+                  <button type="button" pButton icon="pi pi-times" severity="danger" [text]="true" [rounded]="true" (click)="removeFile(i)">
+                    <span class="sr-only">{{ 'common.delete' | translate }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="text-center py-6 text-slate-400 border-2 border-dashed border-slate-200 rounded-xl">
+            {{ 'dashboard.addScouting.images.empty' | translate }}
+          </div>
+        }
+      </div>
+
+      <div class="flex justify-end gap-3 pt-4">
+        <button pButton type="button" severity="secondary" [routerLink]="['/control-panel/scouting-ops']">
+          <span>{{ 'common.cancel' | translate }}</span>
+        </button>
+        <button pButton type="submit" [loading]="submitting()" [disabled]="form.invalid">
+          <span>{{ 'common.save' | translate }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<p-dialog
+  [visible]="createdVisible()"
+  [modal]="true"
+  [dismissableMask]="false"
+  [closeOnEscape]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: 'min(520px, 92vw)' }"
+  (onHide)="closeCreated()">
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-2">
+      <i class="pi pi-check-circle text-emerald-600"></i>
+      <span class="font-semibold text-slate-800">{{ 'dashboard.addScouting.created.title' | translate }}</span>
+    </div>
+  </ng-template>
+
+  <div class="space-y-4">
+    <p class="text-sm text-slate-600">{{ 'dashboard.addScouting.created.desc' | translate }}</p>
+
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div class="text-xs text-slate-500 mb-1">{{ 'dashboard.addScouting.created.codeLabel' | translate }}</div>
+      <div class="font-mono text-sm text-slate-900 break-all">{{ createdCode() || ('common.noValue' | translate) }}</div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end">
+      <button pButton type="button" (click)="closeCreated()">
+        <span>{{ 'dashboard.addScouting.created.close' | translate }}</span>
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

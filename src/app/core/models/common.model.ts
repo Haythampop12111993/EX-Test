@@ -1,3 +1,5 @@
+export type EntityId = number;
+
 export interface ApiResponse<T> {
     statusCode: number;
     succeeded: boolean;

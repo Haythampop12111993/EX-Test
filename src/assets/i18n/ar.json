@@ -94,21 +94,55 @@
         "export": "تصدير للإكسل",
         "actions": "الإجراءات",
         "records": "سجل",
+        "filtered": "مفلتر",
         "tryAdjustingSearch": "حاول تعديل معايير البحث",
         "noData": "لا توجد بيانات",
         "noValue": "لا توجد قيمة",
+        "view": "عرض",
         "edit": "تعديل",
         "delete": "حذف",
         "save": "حفظ",
+        "saveFailed": "تعذر الحفظ. حاول مرة أخرى.",
         "add": "إضافة",
         "all": "الكل",
         "required": "حقل مطلوب",
         "cancel": "إلغاء",
+        "refresh": "تحديث",
+        "tryAgain": "إعادة المحاولة",
+        "clearFilters": "مسح الفلاتر",
         "confirm": "تأكيد",
         "yes": "نعم",
         "no": "لا",
         "success": "تم بنجاح",
         "error": "خطأ",
+        "loadFailed": "تعذر تحميل البيانات. حاول مرة أخرى.",
+        "status": "الحالة",
+        "fromDate": "من",
+        "toDate": "إلى",
+        "select": "اختر",
+        "choose": "اختيار",
+        "notes": "ملاحظات",
+        "latitude": "خط العرض",
+        "longitude": "خط الطول",
+        "address": "العنوان",
+        "addressPlaceholder": "اكتب تفاصيل العنوان بوضوح (علامات مميزة، شارع، ...)",
+        "severity": {
+            "low": "منخفض",
+            "medium": "متوسط",
+            "high": "مرتفع",
+            "severe": "شديد"
+        },
+        "priority": {
+            "low": "منخفض",
+            "medium": "متوسط",
+            "high": "مرتفع",
+            "critical": "حرج"
+        },
+        "source": {
+            "manual": "يدوي",
+            "system": "النظام",
+            "imported": "مستورد"
+        },
         "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا السجل؟",
         "confirmDeleteTitle": "تأكيد الحذف",
         "savedSuccessfully": "تم الحفظ بنجاح",
@@ -187,10 +221,43 @@
                 "title": "نظرة عامة"
             },
             "scoutingOps": {
-                "title": "عمليات الاستكشاف"
+                "title": "عمليات الاستكشاف",
+                "affectedArea": "المساحة المتأثرة",
+                "noPestsAdded": "لم يتم إضافة آفات بعد",
+                "actions": {
+                    "newReport": "تقرير استكشاف جديد"
+                },
+                "filters": {
+                    "searchPlaceholder": "ابحث بالكود أو اسم الموقع",
+                    "searchHelp": "اضغط Enter للبحث أو استخدم الفلاتر.",
+                    "statusHelp": "فلترة النتائج حسب حالة التقرير.",
+                    "dateHelp": "تحديد النتائج ضمن فترة زمنية."
+                },
+                "empty": {
+                    "desc": "لا توجد تقارير استكشاف مطابقة للفلاتر."
+                },
+                "detailsTitle": "تفاصيل الاستكشاف",
+                "details": {
+                    "notes": "ملاحظات"
+                }
             },
             "controlOps": {
-                "title": "عمليات المكافحة"
+                "title": "عمليات المكافحة",
+                "desc": "مراجعة التقارير المصابة وبدء عمليات المكافحة.",
+                "infested": "مصاب",
+                "infestedHint": "التقارير المصابة مميزة باللون",
+                "actions": {
+                    "addControl": "إضافة عملية مكافحة"
+                },
+                "filters": {
+                    "searchPlaceholder": "ابحث بالكود أو اسم الموقع",
+                    "searchHelp": "اضغط Enter للبحث أو استخدم الفلاتر.",
+                    "statusHelp": "فلترة النتائج حسب حالة التقرير.",
+                    "dateHelp": "تحديد النتائج ضمن فترة زمنية."
+                },
+                "empty": {
+                    "desc": "لا توجد عناصر مكافحة مطابقة للفلاتر."
+                }
             },
             "scoutingEval": {
                 "title": "تقييم الاستكشاف",
@@ -310,9 +377,12 @@
             "pageReport": "عرض {first} إلى {last} من أصل {totalRecords} سجل",
             "headers": {
                 "id": "الرقم",
+                "code": "الكود",
                 "site": "الموقع",
+                "area": "المنطقة",
                 "date": "التاريخ",
                 "technician": "الفني",
+                "scout": "الكشاف",
                 "status": "الحالة",
                 "name": "الاسم",
                 "email": "البريد الإلكتروني",
@@ -324,16 +394,88 @@
             "status": {
                 "completed": "مكتمل",
                 "pending": "قيد الانتظار",
-                "inProgress": "جاري العمل"
+                "inProgress": "جاري العمل",
+                "cancelled": "ملغي"
             }
         },
         "addScouting": {
             "title": "إضافة استكشاف",
-            "desc": "تسجيل بيانات استكشاف للمواقع والمنشآت"
+            "desc": "تسجيل بيانات استكشاف للمواقع والمنشآت",
+            "created": {
+                "title": "تم إنشاء عملية الاستكشاف",
+                "desc": "احتفظ بهذا الكود للمتابعة وتتبع العملية.",
+                "codeLabel": "كود العملية",
+                "close": "إغلاق"
+            },
+            "report": {
+                "title": "تفاصيل التقرير"
+            },
+            "form": {
+                "latitudeHelp": "اختياري. استخدم إحداثيات GPS عند توفرها.",
+                "longitudeHelp": "اختياري. استخدم إحداثيات GPS عند توفرها.",
+                "addressHelp": "أضف تفاصيل واضحة لتسهيل الوصول للموقع.",
+                "source": "المصدر",
+                "sourceHelp": "كيف تم إنشاء هذا التقرير؟",
+                "infestationLevel": "مستوى الإصابة",
+                "infestationLevelHelp": "المستوى العام للإصابة في هذا التقرير.",
+                "priority": "الأولوية",
+                "priorityHelp": "حدد مدى الاستعجال للمتابعة والمكافحة.",
+                "priorityReason": "سبب الأولوية",
+                "priorityReasonPlaceholder": "مثال: بالقرب من موقع حساس، خطر انتشار مرتفع",
+                "priorityReasonHelp": "اشرح سبب اختيار هذه الأولوية.",
+                "notes": "ملاحظات التقرير",
+                "notesPlaceholder": "اكتب أي ملاحظات مهمة عن التقرير",
+                "notesHelp": "مطلوب. أضف سياقاً وملاحظات واضحة."
+            },
+            "location": {
+                "cta": "استخدام الموقع الحالي",
+                "updated": "تم تحديث الموقع",
+                "failed": "تعذر الحصول على الموقع",
+                "unsupported": "الموقع الجغرافي غير مدعوم على هذا الجهاز"
+            },
+            "pests": {
+                "loading": "جاري تحميل قائمة الآفات...",
+                "pestHelp": "اختر الآفة التي تمت ملاحظتها.",
+                "severityHelp": "حدد شدة الإصابة.",
+                "affectedAreaHelp": "نسبة تقديرية من المساحة المتأثرة.",
+                "notesHelp": "ملاحظات اختيارية حول هذه الآفة."
+            },
+            "images": {
+                "help": "اختياري. ارفع صور واضحة (بحد أقصى 5MB للصورة).",
+                "empty": "لا توجد صور مضافة",
+                "added": "تمت إضافة الصور"
+            }
         },
         "addControl": {
             "title": "إضافة عملية مكافحة",
-            "desc": "تسجيل عمليات مكافحة جديدة"
+            "desc": "تسجيل عمليات مكافحة جديدة",
+            "noReport": {
+                "title": "لم يتم تحديد تقرير استكشاف",
+                "desc": "ارجع إلى عمليات المكافحة واختر تقريراً لبدء عملية مكافحة.",
+                "back": "العودة لعمليات المكافحة"
+            },
+            "summary": {
+                "pests": "آفات"
+            },
+            "form": {
+                "readyStock": "المخزون الجاهز",
+                "readyStockPlaceholder": "اختر المخزون الجاهز",
+                "noReadyStock": "لا يوجد مخزون جاهز متاح لهذا الموقع.",
+                "litersUsed": "اللترات المستخدمة",
+                "litersUsedHelp": "أدخل الكمية المستخدمة باللتر.",
+                "applicationMethod": "طريقة التطبيق",
+                "applicationMethodPlaceholder": "مثال: رش، طُعم",
+                "applicationMethodHelp": "اختياري. اكتب كيف تم تطبيق المبيد.",
+                "nextFollowUpDate": "تاريخ المتابعة القادمة",
+                "nextFollowUpDateHelp": "اختياري. حدد موعد الزيارة التالية.",
+                "evaluationDate": "تاريخ التقييم",
+                "evaluationDateHelp": "اختياري. متى يتم تقييم النتائج.",
+                "needsAnotherControl": "يحتاج عملية مكافحة أخرى",
+                "notesHelp": "ملاحظات اختيارية عن العملية."
+            },
+            "validation": {
+                "litersUsed": "أدخل كمية صحيحة (على الأقل 0.1)."
+            }
         },
         "addMonitoring": {
             "title": "إضافة مراقبة",

@@ -4,11 +4,14 @@ import { Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { UsersService } from '../../../../../../core/services/users.service';
 import { RolesService } from '../../../../../../core/services/roles.service';
+import { AreasService } from '../../../../../../core/services/areas.service';
 import { CreateUserRequest, UpdateUserRequest } from '../../../../../../core/models/user.model';
 import { Role } from '../../../../../../core/models/role.model';
 import { MessageService } from 'primeng/api';
 import { DynamicFormComponent } from '../../../../../../shared/components/dynamic-form/dynamic-form.component';
 import { FieldConfig } from '../../../../../../shared/models/field-config.interface';
+import { forkJoin } from 'rxjs';
+import { Area } from '../../../../../../core/models/geo.model';
 
 @Component({
   selector: 'app-users-form',
@@ -28,6 +31,7 @@ export class UsersFormComponent implements OnInit {
 
   private usersService = inject(UsersService);
   private rolesService = inject(RolesService);
+  private areasService = inject(AreasService);
   private messageService = inject(MessageService);
 
   config: FieldConfig[] = [];
@@ -36,13 +40,16 @@ export class UsersFormComponent implements OnInit {
 
   ngOnInit() {
     this.loading.set(true);
-    this.loadRoles();
+    this.loadLookups();
   }
 
-  private loadRoles() {
-    this.rolesService.getRoles().subscribe({
-      next: (roles) => {
-        this.buildConfig(roles);
+  private loadLookups() {
+    forkJoin({
+      roles: this.rolesService.getRoles(),
+      areas: this.areasService.getAreas()
+    }).subscribe({
+      next: ({ roles, areas }) => {
+        this.buildConfig(roles, areas);
         if (this.userId) {
           this.loadUser();
         } else {
@@ -50,14 +57,14 @@ export class UsersFormComponent implements OnInit {
         }
       },
       error: (err: unknown) => {
-        console.error('Error loading roles', err);
+        console.error('Error loading user lookups', err);
         this.loading.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load roles' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load lookups' });
       }
     });
   }
 
-  private buildConfig(roles: Role[]) {
+  private buildConfig(roles: Role[], areas: Area[]) {
     this.config = [
       {
         type: 'text',
@@ -93,10 +100,17 @@ export class UsersFormComponent implements OnInit {
         gridClass: 'col-span-12 md:col-span-6'
       },
       {
-        type: 'number',
+        type: 'select',
         name: 'assignedAreaId',
         label: 'dashboard.users.form.assignedAreaId',
-        placeholder: 'Enter assigned area ID',
+        placeholder: 'Select area',
+        options: areas
+          .slice()
+          .sort((a, b) => `${a.regionName ?? ''}${a.name}`.localeCompare(`${b.regionName ?? ''}${b.name}`))
+          .map((a) => ({
+            label: a.regionName ? `${a.regionName} - ${a.name}` : a.name,
+            value: typeof a.id === 'string' ? Number(a.id) : (a.id as number)
+          })),
         required: true,
         gridClass: 'col-span-12 md:col-span-6'
       },
@@ -155,6 +169,7 @@ export class UsersFormComponent implements OnInit {
         fullName: data.fullName ?? '',
         email: data.email ?? '',
         phoneNumber: data.phoneNumber ?? '',
+        nationalId: data.nationalId ?? '',
         assignedAreaId: data.assignedAreaId ?? 0,
         roles: data.roles ?? []
       };

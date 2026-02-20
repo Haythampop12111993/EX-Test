@@ -96,21 +96,55 @@
         "export": "Export to Excel",
         "actions": "Actions",
         "records": "Records",
+        "filtered": "Filtered",
         "tryAdjustingSearch": "Try adjusting your search criteria",
         "noData": "No data found",
         "noValue": "No Value",
+        "view": "View",
         "edit": "Edit",
         "delete": "Delete",
         "save": "Save",
+        "saveFailed": "Could not save. Please try again.",
         "add": "Add",
         "all": "All",
         "required": "Required field",
         "cancel": "Cancel",
+        "refresh": "Refresh",
+        "tryAgain": "Try again",
+        "clearFilters": "Clear filters",
         "confirm": "Confirm",
         "yes": "Yes",
         "no": "No",
         "success": "Success",
         "error": "Error",
+        "loadFailed": "Could not load data. Please try again.",
+        "status": "Status",
+        "fromDate": "From",
+        "toDate": "To",
+        "select": "Select",
+        "choose": "Choose",
+        "notes": "Notes",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "address": "Address",
+        "addressPlaceholder": "Write the address details clearly (landmarks, street, etc.)",
+        "severity": {
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High",
+            "severe": "Severe"
+        },
+        "priority": {
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High",
+            "critical": "Critical"
+        },
+        "source": {
+            "manual": "Manual",
+            "system": "System",
+            "imported": "Imported"
+        },
         "confirmDelete": "Are you sure you want to delete this record?",
         "confirmDeleteTitle": "Confirm Delete",
         "savedSuccessfully": "Saved successfully",
@@ -189,10 +223,43 @@
                 "title": "Dashboard Overview"
             },
             "scoutingOps": {
-                "title": "Scouting Operations"
+                "title": "Scouting Operations",
+                "affectedArea": "Affected area",
+                "noPestsAdded": "No pests added yet",
+                "actions": {
+                    "newReport": "New scouting report"
+                },
+                "filters": {
+                    "searchPlaceholder": "Search by code or site name",
+                    "searchHelp": "Press Enter to search, or use filters below.",
+                    "statusHelp": "Filter results by report status.",
+                    "dateHelp": "Limit results to a date range."
+                },
+                "empty": {
+                    "desc": "No scouting reports match your filters."
+                },
+                "detailsTitle": "Scouting details",
+                "details": {
+                    "notes": "Notes"
+                }
             },
             "controlOps": {
-                "title": "Control Operations"
+                "title": "Control Operations",
+                "desc": "Review infested reports and start control operations.",
+                "infested": "Infested",
+                "infestedHint": "Infested reports are highlighted",
+                "actions": {
+                    "addControl": "Add control operation"
+                },
+                "filters": {
+                    "searchPlaceholder": "Search by code or site name",
+                    "searchHelp": "Press Enter to search, or use filters below.",
+                    "statusHelp": "Filter results by report status.",
+                    "dateHelp": "Limit results to a date range."
+                },
+                "empty": {
+                    "desc": "No control items match your filters."
+                }
             },
             "scoutingEval": {
                 "title": "Scouting Evaluation",
@@ -312,9 +379,12 @@
             "pageReport": "Showing {first} to {last} of {totalRecords} entries",
             "headers": {
                 "id": "ID",
+                "code": "Code",
                 "site": "Site",
+                "area": "Area",
                 "date": "Date",
                 "technician": "Technician",
+                "scout": "Scout",
                 "status": "Status",
                 "name": "Name",
                 "email": "Email",
@@ -326,16 +396,88 @@
             "status": {
                 "completed": "Completed",
                 "pending": "Pending",
-                "inProgress": "In Progress"
+                "inProgress": "In Progress",
+                "cancelled": "Cancelled"
             }
         },
         "addScouting": {
             "title": "Add Scouting",
-            "desc": "Record exploration data for sites and facilities"
+            "desc": "Record exploration data for sites and facilities",
+            "created": {
+                "title": "Scouting report created",
+                "desc": "Save this code for tracking and follow-up.",
+                "codeLabel": "Operation code",
+                "close": "Close"
+            },
+            "report": {
+                "title": "Report details"
+            },
+            "form": {
+                "latitudeHelp": "Optional. Use GPS coordinates when available.",
+                "longitudeHelp": "Optional. Use GPS coordinates when available.",
+                "addressHelp": "Add clear address details to help locate the site.",
+                "source": "Source",
+                "sourceHelp": "How was this report created?",
+                "infestationLevel": "Infestation level",
+                "infestationLevelHelp": "Overall infestation level for this report.",
+                "priority": "Priority",
+                "priorityHelp": "Set urgency for follow-up and control.",
+                "priorityReason": "Priority reason",
+                "priorityReasonPlaceholder": "e.g. Near sensitive site, high spread risk",
+                "priorityReasonHelp": "Explain why this priority was chosen.",
+                "notes": "Notes",
+                "notesPlaceholder": "Write any important notes for the report",
+                "notesHelp": "Required. Provide context and observations."
+            },
+            "location": {
+                "cta": "Use current location",
+                "updated": "Location updated",
+                "failed": "Could not get location",
+                "unsupported": "Geolocation is not supported on this device"
+            },
+            "pests": {
+                "loading": "Loading pests list...",
+                "pestHelp": "Select the pest you observed.",
+                "severityHelp": "Choose how severe the infestation is.",
+                "affectedAreaHelp": "Estimated percentage of the area affected.",
+                "notesHelp": "Optional notes for this pest observation."
+            },
+            "images": {
+                "help": "Optional. Upload clear images (max 5MB each).",
+                "empty": "No images added",
+                "added": "Images added"
+            }
         },
         "addControl": {
             "title": "Add Control Operation",
-            "desc": "Register new pest control operations"
+            "desc": "Register new pest control operations",
+            "noReport": {
+                "title": "No scouting report selected",
+                "desc": "Go back to Control Operations and choose a report to start control.",
+                "back": "Back to Control Operations"
+            },
+            "summary": {
+                "pests": "pests"
+            },
+            "form": {
+                "readyStock": "Ready stock",
+                "readyStockPlaceholder": "Select ready stock",
+                "noReadyStock": "No ready stock available for this site.",
+                "litersUsed": "Liters used",
+                "litersUsedHelp": "Enter the quantity used in liters.",
+                "applicationMethod": "Application method",
+                "applicationMethodPlaceholder": "e.g. Spraying, Baiting",
+                "applicationMethodHelp": "Optional. Describe how the pesticide was applied.",
+                "nextFollowUpDate": "Next follow-up date",
+                "nextFollowUpDateHelp": "Optional. Schedule the next follow-up visit.",
+                "evaluationDate": "Evaluation date",
+                "evaluationDateHelp": "Optional. When results should be evaluated.",
+                "needsAnotherControl": "Needs another control operation",
+                "notesHelp": "Optional notes about the operation."
+            },
+            "validation": {
+                "litersUsed": "Please enter a valid quantity (at least 0.1)."
+            }
         },
         "addMonitoring": {
             "title": "Add Monitoring",
